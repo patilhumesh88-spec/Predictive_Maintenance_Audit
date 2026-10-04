@@ -1,0 +1,11 @@
+```mermaid
+flowchart TD
+    A[Sensor Input] --> B[Input Validation]
+    B --> C[Physics Feature Engineering]
+    C --> D[Rule Engine HDF/PWF/OSF]
+    C --> E[Random Forest ML Risk]
+    D --> F[Decision Layer]
+    E --> F
+    F --> G[Explanation Layer]
+    G --> H[Streamlit Dashboard]
+```

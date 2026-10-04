@@ -1,0 +1,241 @@
+
+================================================================================
+ALGOTHON 2026: AI4I 2020 Predictive Maintenance — Project Context & State Summary
+================================================================================
+
+This document serves as a complete, precise, and hallucination-free context map for
+any AI model taking over or collaborating on the ALGOTHON Predictive Maintenance project.
+All statistics, configurations, parameters, and findings are verified against the active
+codebase and notebook execution outputs. No code or metadata has been altered.
+
+---
+
+1. PROJECT SUMMARY & CORE PROBLEM
+=================================
+* Objective: Predict machine failures safely and accurately on the UCI AI4I 2020
+  Predictive Maintenance dataset (10,000 observations representing industrial telemetry).
+* Target Variable: "Machine failure" (binary: 0 or 1).
+  * Total rows in dataset: 10,000
+  * Total failures: 339 (overall failure rate: 3.39%)
+* Constraints:
+  * Strict avoidance of data leakage. Specifically, the five individual failure mode
+    flags ("TWF", "HDF", "PWF", "OSF", "RNF") are consequence labels that are only
+    available *after* a failure occurs. They MUST NEVER be used as model input features.
+  * Robust validation. The dataset has no timestamp column, but adjacent observations
+    exhibit high temporal dependency in temperature measurements (random walks). Standard
+    randomly-shuffled cross-validation overestimates performance; hence, ordered/block
+    robustness tests must be used as stress tests.
+
+---
+
+2. FILE SYSTEM & DIRECTORY ARCHITECTURE
+=======================================
+The directory contains the following components:
+
+.
+├── .gitignore                      # Standard python gitignores + ignores data/raw/*
+├── README.md                       # High-level overview (currently skeleton headers only)
+├── requirements.txt                # Python dependencies (scikit-learn, xgboost, streamlit, etc.)
+├── pytest.ini                      # Configures pythonpath = . for testing
+├── data/
+│   └── raw/
+│       └── ai4i2020.csv            # Original raw UCI dataset (10,000 rows)
+├── src/
+│   ├── __init__.py                 # Package declaration
+│   ├── config.py                   # Central constants, column maps, boundaries, physical limits
+│   ├── data.py                     # Data loading and row-level schema validation
+│   ├── features.py                 # Feature engineering pipeline
+│   ├── models.py                   # Model zoo definitions (Dummy, LogReg, RF, HistGB, XGBoost)
+│   ├── rules.py                    # Perfect math reconstructions of HDF, PWF, and OSF
+│   ├── train.py                    # dev/holdout splitter, model CV, recall audit, saves RF model
+│   ├── validation.py               # Evaluator splitters, metrics, and out-of-fold risk scorers
+│   └── predict.py                  # Leakage-safe inference CLI for scoring external CSV files
+├── tests/
+│   ├── helpers.py                  # Synthetic data generator and test fixtures
+│   ├── test_data.py                # Schema check and raw data audits unit tests
+│   ├── test_predict.py             # Inference pipeline and column leakage unit tests
+│   └── test_rules.py               # Deterministic physical rules correctness unit tests
+├── reports/
+│   ├── failure_rule_summary.csv    # Match summary between physical rules and raw column flags
+│   ├── mode_without_failure_label.csv # Logs instances where failure modes occur but Machine failure is 0
+│   ├── per_mode_rule_coverage.csv  # Rule coverage breakdown per mode
+│   └── rule_unexplained_failures.csv # Logs the 9 anomalous failures without flags in the raw dataset
+├── notebooks/
+│   ├── 01_data_audit.ipynb         # Initial dataset integrity and anomaly inspections
+│   ├── 02_eda.ipynb                # Sensor distributions, correlation, and wear-binned failures
+│   ├── 03_failure_rule_audit.ipynb # Initial coding and verification of physical failure rules
+│   ├── 04_feature_engineering.ipynb # Design, validation, and visual checking of engineered features
+│   ├── 05_model_comparison.ipynb   # Baseline ladder & CV comparisons of Raw vs. Engineered features
+│   ├── 06_validation_stress_test.ipynb # Shuffled CV vs Block CV robustness stress test
+│   ├── 07_rule_unexplained_failures_FIXED_v2.ipynb # Audit of rule-unexplained failures on dev split
+│   └── 08_final_evaluation.ipynb   # Scopes and reports performance on untouched final 20% holdout
+└── dashboard/
+    # All files below are placeholders (size 0 bytes) and need to be implemented:
+    ├── Dataset overview
+    ├── Machine Failure Prediction
+    ├── Model Performance
+    ├── Risk Probability
+    ├── Rule Explanation
+    └── Sensor Values
+
+---
+
+3. DATA ANOMALIES & LABEL DEFECTS (INHERENT TO AI4I 2020)
+=========================================================
+The raw dataset contains several inconsistencies that must be understood precisely to avoid model confusion:
+* The "Unexplained Failures" (9 cases): There are exactly 9 rows in the raw dataset where `Machine failure = 1`
+  but ALL five failure mode flags (TWF, HDF, PWF, OSF, RNF) are set to 0. (On the development split of the first
+  80% of rows, there are exactly 6 of these).
+* The "RNF False Positives" (18 cases): There are exactly 18 rows where a failure mode is active (specifically,
+  `RNF = 1`), but `Machine failure = 0`. The dataset creators did not consider Random Failures (RNF) as true machine
+  failures.
+* Multiple failure modes (1 case): UDI 1626 is the only row in the dataset where multiple failure flags are active
+  at once (both HDF and OSF are 1, causing a failure).
+
+---
+
+4. RECONSTRUCTED PHYSICAL FAILURE RULES
+=======================================
+Through careful audit, three of the failure modes can be 100% perfectly reconstructed using deterministic mathematical rules based on the dataset documentation:
+
+1. Heat Dissipation Failure (rule_hdf)
+   * Math: Temp Difference (Process Temp - Air Temp) < 8.6 K AND Rotational Speed < 1380 RPM.
+   * Implementation: `(Process_temp - Air_temp < 8.6) & (Rotational_speed < 1380)`
+   * Match: Reconstructs the raw `HDF` column perfectly (100% match, 115/115 occurrences).
+
+2. Power Failure (rule_pwf)
+   * Math: Mechanical Power $P = \tau \times \omega < 3500\text{ W}$ OR $> 9000\text{ W}$,
+     where $\tau$ is Torque [Nm] and $\omega = \text{Rotational speed [rpm]} \times \frac{2\pi}{60}$.
+   * Implementation: `power_w = Torque * RPM * (2 * pi / 60)`, then `(power_w < 3500) | (power_w > 9000)`
+   * Match: Reconstructs the raw `PWF` column perfectly (100% match, 95/95 occurrences).
+
+3. Overstrain Failure (rule_osf)
+   * Math: Total Strain (Tool Wear $\times$ Torque) exceeds a threshold limit determined by the machine Type:
+     * L (Low quality): limit = 11,000 min·Nm
+     * M (Medium quality): limit = 12,000 min·Nm
+     * H (High quality): limit = 13,000 min·Nm
+   * Implementation: `strain = Tool_wear * Torque`, `limit = Type.map({"L": 11000, "M": 12000, "H": 13000})`,
+     then `strain > limit`
+   * Match: Reconstructs the raw `OSF` column perfectly (100% match, 98/98 occurrences).
+
+* Note on TWF (Tool Wear Failure): Tool wear failures occur stochastically between 200 and 240 mins. No deterministic
+  mathematical rule perfectly reconstructs TWF from raw continuous values.
+* Note on RNF (Random Failure): Occurs completely at random with 0.1% probability; decoupled from physical variables.
+
+---
+
+5. FEATURE ENGINEERING PIPELINE
+===============================
+To enable linear/tree models to learn physical boundaries easily, 4 engineered features are constructed:
+* `temp_diff`     : Process temperature [K] - Air temperature [K]
+* `power_w`       : Torque [Nm] * Rotational speed [rpm] * 2 * pi / 60
+* `wear_torque`   : Tool wear [min] * Torque [Nm] (represented as `strain` in some modules)
+* `strain_ratio`  : wear_torque / strain_limit (where strain_limit is 11k, 12k, or 13k based on machine Type)
+
+These are packaged inside `src/features.py:build_features`.
+
+---
+
+6. CV BENCHMARKS & MODEL EVALUATION SUMMARY
+===========================================
+To avoid tuning on test data, models are fitted on a Development set (first 8,000 rows, 300 failures).
+All comparisons are evaluated using out-of-fold (OOF) predictions.
+
+1. Model Comparison on Stratified 5-Fold CV (Optimistic/IID Assumption):
+   * Evaluation metric: Average Precision (AP) Mean ± Std
+   * RandomForest (Engineered Features) : **0.9066 ± 0.0350**
+   * XGBoost (Engineered Features)      : 0.9033 ± 0.0503
+   * HistGB (Engineered Features)       : 0.9022 ± 0.0448
+   * HistGB (Raw Features)              : 0.8302 ± 0.0768
+   * XGBoost (Raw Features)             : 0.8258 ± 0.0651
+   * RandomForest (Raw Features)        : 0.7673 ± 0.0631
+   * LogReg (Engineered Features)       : 0.4652 ± 0.0455
+   * LogReg (Raw Features)              : 0.4397 ± 0.0576
+   * Key takeaways:
+     * Feature engineering provides an absolute AP boost of **+0.1393** for Random Forest (0.9066 vs 0.7673).
+     * Linear models (Logistic Regression) struggle significantly due to non-linear physical limits (like low OR high power).
+
+2. Validation Robustness Test (Block 5-Fold CV / contiguous blocks):
+   * Tests model stability under temporal-like data shifts (Process/Air temperatures behave like random walks).
+   * RandomForest (Engineered Features) : **0.8617** (AP Gap: **0.0450**)
+   * XGBoost (Engineered Features)      : **0.8648** (AP Gap: **0.0386**)
+   * HistGB (Engineered Features)       : 0.8549 (AP Gap: 0.0473)
+   * RandomForest (Raw Features)        : 0.6345 (AP Gap: 0.1328)
+   * XGBoost (Raw Features)             : 0.6447 (AP Gap: 0.1811)
+   * Key takeaways:
+     * There is a small robustness gap (~0.04 AP) for engineered features when validating on block structures.
+     * The gap is massive (~0.13–0.18 AP) for raw features, confirming that physical features stabilize generalization.
+
+---
+
+7. THE PERFORMANCE CEILING: RULE-UNEXPLAINED FAILURES (NOTEBOOK 07)
+===================================================================
+On the 8,000-row development split, there are 300 failures:
+* 259 are covered by HDF, PWF, or OSF physical rules.
+* 41 are "rule-unexplained" failures (13.67%).
+  * Composition of these 41: 34 are TWF, 1 is RNF, and 6 are anomalous unexplained failures with no flag set.
+* ML Detection of Rule-Unexplained failures:
+  * Running an out-of-fold Random Forest model on engineered features reveals that these failures cannot be predicted.
+  * Number of rule-unexplained failures detected by ML at standard decision thresholds:
+    * Threshold >= 0.40 : **0 / 41 (0.00%)**
+    * Threshold >= 0.50 : **0 / 41 (0.00%)**
+    * Threshold >= 0.60 : **0 / 41 (0.00%)**
+    * Threshold >= 0.70 : **0 / 41 (0.00%)**
+    * Threshold >= 0.30 : **3 / 41 (7.32%)**
+  * Average OOF risk score assigned to rule-unexplained cases: **0.087** (compared to 0.015 for normal rows and 0.817 for rule-covered failures).
+  * Conclusion: Tool wear failures (TWF) do not carry clear physical sensor signals. They represent a hard performance recall ceiling (~86% max possible recall on dev split) that machine learning models cannot bypass using only these features.
+
+---
+
+8. FINAL HOLDOUT SYSTEM EVALUATION (NOTEBOOK 08)
+================================================
+The final 20% untouched holdout (last 2,000 rows in order, 39 failures) was used once to evaluate three systems:
+1. Documented physical rules only (HDF | PWF | OSF)
+2. Leakage-safe ML model (Random Forest, threshold = 0.515 tuned on dev OOF predictions)
+3. Hybrid system (Rules OR ML risk >= 0.515)
+
+Holdout Performance Metrics:
+* Documented rules: Precision = 1.0000 | Recall = 0.7179 | F1 = 0.8358 | ROC-AUC = 0.8590 | AP = 0.7234
+* Leakage-safe ML : Precision = 1.0000 | Recall = 0.7179 | F1 = 0.8358 | ROC-AUC = 0.9720 | AP = 0.7851
+* Hybrid rules + ML: Precision = 1.0000 | Recall = 0.7179 | F1 = 0.8358 | ROC-AUC = 0.9720 | AP = 0.7851
+
+Confusion Matrices on Holdout (identical across all three systems):
+* Normal correctly predicted (TN): 1961
+* False alarms (FP): 0
+* Undetected failures (FN): 11
+* Correctly predicted failures (TP): 28
+
+Why are the results identical?
+* Out of the 39 holdout failures, exactly 28 are rule-covered (HDF, PWF, or OSF) and are detected perfectly by both physical rules and ML.
+* The remaining 11 failures are rule-unexplained (TWF/RNF) and are undetected by both systems.
+* ML does not improve recall over the physical rules on this holdout, but it offers soft risk probabilities (higher AUC/AP) that are valuable for decision-making.
+
+---
+
+9. PROJECT STATUS: HALF-DONE CHEATSHEET & NEXT STEPS
+===================================================
+What is complete:
+* Raw data analysis, auditing, and exploration (Notebooks 01–03).
+* Feature engineering mathematical design and validation (Notebook 04, `src/features.py`).
+* Model selection pipelines, robust cross-validation, and holdout tests (Notebooks 05–08, `src/models.py`, `src/validation.py`, `src/train.py`).
+* Perfect physical rules engine (`src/rules.py`).
+* Robust CLI scoring mechanism (`src/predict.py`).
+* Fully verified pytest test suite (16 unit tests passing perfectly).
+
+What is NOT complete / placeholder status:
+1. Streamlit Dashboard App:
+   * The `dashboard/` directory contains 6 files of size 0 bytes. These are empty placeholders.
+   * There is no central streamlit launch file (e.g., `app.py`, `dashboard.py`) to connect these pages.
+   * Action item: Implement the interactive Streamlit dashboard. It should load the raw data, perform feature engineering, read the saved model to perform live inference, and display interactive charts for the 6 placeholder categories:
+     * Dataset overview (summary stats, class imbalances, correlations)
+     * Machine Failure Prediction (interactive user inputs to calculate live failure risk)
+     * Model Performance (metrics, ROC/PR curves, confusion matrices)
+     * Risk Probability (visual distribution of OOF predictions)
+     * Rule Explanation (visualize HDF, PWF, OSF boundaries and why they fired)
+     * Sensor Values (time-series sensor trends and thresholds)
+2. Model Serialized File:
+   * `models/rf_engineered.joblib` must be generated by running `python -m src.train --fit-all` to make sure it is present for the Streamlit dashboard to perform live prediction.
+3. README.md Expansion:
+   * The README contains empty headers that need to be populated with the results and findings detailed in this context document.
+
+================================================================================

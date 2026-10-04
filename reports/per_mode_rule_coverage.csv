@@ -1,0 +1,4 @@
+mode,dataset_flag_count,rule_detected_count,coverage_percent
+HDF,115,115,100.0
+PWF,95,95,100.0
+OSF,98,98,100.0
