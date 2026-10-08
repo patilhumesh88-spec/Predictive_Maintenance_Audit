@@ -1,8 +1,13 @@
+import os
+import sys
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
 from pathlib import Path
+
+# Ensure the repository root is importable when running under Streamlit Cloud
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import (
     MODEL_PATH, PRODUCTION_THRESHOLD, AIR, PROC, RPM, TORQUE, WEAR, TYPE,

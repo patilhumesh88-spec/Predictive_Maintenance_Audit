@@ -90,7 +90,10 @@ ALGOTHON/
 ├── dashboard/app.py          # Streamlit demo (inference only)
 ├── docs/
 │   ├── PROJECT_DECISIONS.md  # Locked methodology contract
-│   └── architecture.md       # Architecture + data-flow diagram
+│   ├── architecture.md       # Architecture + data-flow diagram
+│   ├── architecture.mmd      # Mermaid diagram
+│   ├── DEMO_SCRIPT.md        # Demo video script (see below)
+│   └── SUBMISSION_CHECKLIST.md # Submission checklist
 ├── data/raw/ai4i2020.csv     # UCI AI4I 2020 dataset
 ├── models/rf_engineered.joblib  # Production model bundle
 ├── notebooks/                # Audited analysis notebooks 01-08
@@ -138,11 +141,6 @@ UCI AI4I 2020 Predictive Maintenance Dataset — provided for benchmarking. This
 Assisted by AI coding tools (Claude Code) under direct human methodology oversight. All numerical results were verified against executed notebooks before inclusion.
 
 ## Submission Links
-- GitHub repo: *(to be added after deployment)*
-- Demo video: *(to be added)*
-- Deployed prototype: *(to be added)*
-
-## Future Improvements
-- Investigate TWF-specific sensor patterns without leaking failure-mode flags
-- Add uncertainty / calibration reporting to the ML risk score
-- Document the residual failure composition in more detail once additional sensor channels are available
+- GitHub repository: https://github.com/patilhumesh88-spec/algothon26-data-science.git
+- Live dashboard: [to be deployed]
+- Demo video: [to be uploaded]
