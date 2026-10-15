@@ -9,16 +9,16 @@ from pathlib import Path
 # Ensure the repository root is importable when running under Streamlit Cloud
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.config import (
+from maint_audit.config import (
     MODEL_PATH, PRODUCTION_THRESHOLD, AIR, PROC, RPM, TORQUE, WEAR, TYPE,
     SENSOR_COLS, REQUIRED_INPUT_COLS
 )
-from src.predict import predict_frame
-from src.features import build_features
+from maint_audit.predict import predict_frame
+from maint_audit.features import build_features
 
 # Set page config
 st.set_page_config(
-    page_title="ALGOTHON '26 — Predictive Maintenance",
+    page_title="Predictive Maintenance Audit",
     page_icon="⚙️",
     layout="wide",
 )
@@ -27,22 +27,26 @@ st.set_page_config(
 @st.cache_resource
 def load_bundle():
     if not MODEL_PATH.exists():
-        st.error(f"Production model not found at {MODEL_PATH}. Run python -m src.train --fit-all first.")
+        st.error(f"Production model not found at {MODEL_PATH}. Run python -m maint_audit.train --fit-all first.")
         st.stop()
     return joblib.load(MODEL_PATH)
 
 bundle = load_bundle()
 
+# Load metrics from single source of truth if available
+metrics_path = Path(__file__).parent.parent / "reports" / "metrics.json"
+_metrics_data = None
+if metrics_path.exists():
+    import json
+    _metrics_data = json.loads(metrics_path.read_text())
+
 # Title & Header
-st.title("⚙️ ALGOTHON '26 Predictive Maintenance Dashboard")
-st.markdown("### **ALG-DATA-02: Predict What Happens Next**")
-st.markdown(
-    "**Physics-informed predictive maintenance with documented-rule analysis + ML risk scoring**"
-)
+st.title("⚙️ Predictive Maintenance Audit")
+st.markdown("**Leakage-aware failure-risk scoring on the UCI AI4I 2020 dataset**")
 st.write(
     "This system audits a synthetic predictive-maintenance benchmark (UCI AI4I 2020), "
     "evaluates physical failure mechanisms, adds physics-informed features, "
-    "and integrates a machine learning risk layer to capture residual anomalies safely."
+    "and integrates a machine learning risk layer for continuous risk ranking."
 )
 
 st.write("---")
@@ -167,24 +171,34 @@ col_bench, col_findings = st.columns(2)
 with col_bench:
     st.header("🏆 Model Performance (Untouched Holdout)")
     st.write(
-        "To guarantee generalization, all architectural decisions were frozen on development data. "
-        "The final systems were scored **exactly once** on the untouched 20% holdout (last 2,000 rows in original order)."
+        "All architectural decisions were frozen on development data. "
+        "The final systems were scored **exactly once** on the untouched 20% holdout (last 2,000 rows in original order). "
+        "**Note:** The shipped model artifact was refit on all 10,000 rows for inference; "
+        "holdout metrics below come from a dev-trained model (see model card)."
     )
 
-    # Verified metrics table from Notebook 08
-    metrics_df = pd.DataFrame([
-        {"System": "Documented Rules Only", "Precision": "1.0000", "Recall": "0.7179", "F1": "0.8358", "AP": "0.7234", "ROC-AUC": "0.8590"},
-        {"System": "Leakage-safe ML (RF)", "Precision": "1.0000", "Recall": "0.7179", "F1": "0.8358", "AP": "0.7851", "ROC-AUC": "0.9720"},
-        {"System": "Hybrid (Rules OR ML)", "Precision": "1.0000", "Recall": "0.7179", "F1": "0.8358", "AP": "0.7851", "ROC-AUC": "0.9720"}
-    ])
+    # Read from metrics.json (single source of truth) or fall back to verified constants
+    if _metrics_data and "holdout" in _metrics_data:
+        h = _metrics_data["holdout"]
+        metrics_df = pd.DataFrame([
+            {"System": "Documented Rules", **{k: f"{v:.4f}" for k, v in h["PhysicsRules"].items() if k in ("precision","recall","f1","pr_auc","roc_auc")}},
+            {"System": "Leakage-safe ML (RF)", **{k: f"{v:.4f}" for k, v in h["RandomForest"].items() if k in ("precision","recall","f1","pr_auc","roc_auc")}},
+            {"System": "Hybrid (Rules OR ML)", **{k: f"{v:.4f}" for k, v in h["Hybrid"].items() if k in ("precision","recall","f1","pr_auc","roc_auc")}},
+        ])
+    else:
+        metrics_df = pd.DataFrame([
+            {"System": "Documented Rules", "precision": "1.0000", "recall": "0.7179", "f1": "0.8358", "pr_auc": "0.7234", "roc_auc": "0.8590"},
+            {"System": "Leakage-safe ML (RF)", "precision": "1.0000", "recall": "0.7179", "f1": "0.8358", "pr_auc": "0.7851", "roc_auc": "0.9720"},
+            {"System": "Hybrid (Rules OR ML)", "precision": "1.0000", "recall": "0.7179", "f1": "0.8358", "pr_auc": "0.7851", "roc_auc": "0.9720"},
+        ])
     st.table(metrics_df)
 
     st.markdown(
         "**Untouched Holdout Confusion Matrix (Identical for all 3 systems):**\n"
-        "- **True Negatives (Normal correctly flagged):** 1,961\n"
-        "- **False Positives (False alarms):** 0\n"
-        "- **False Negatives (Undetected failures):** 11 (all represent rule-unexplained failures)\n"
-        "- **True Positives (Correctly identified failures):** 28"
+        "- **True Negatives:** 1,961\n"
+        "- **False Positives:** 0\n"
+        "- **False Negatives:** 11 (rule-unexplained failures)\n"
+        "- **True Positives:** 28"
     )
 
 with col_findings:
@@ -197,8 +211,9 @@ with col_findings:
         "provides a **+0.139** AP boost for Random Forest (0.907 vs 0.767 raw) and stabilizes performance against block cross-validation drops.\n"
         "- **Stricter Validation Stress Tests:** Standard random-shuffled CV overestimates performance (AP ~0.907) due "
         "to temporal temperature dependency (random walks). Block CV serves as an honest robustness stress test (AP ~0.862).\n"
-        "- **The Recall Performance Ceiling:** On the development set, 41 failures (13.67%) are completely unexplained "
-        "by HDF/PWF/OSF rules. Of these, 34 are Tool Wear Failures (TWF). Since tool wear failures are stochastic, "
-        "sensor streams contain no physical warning indicators. The ML model correctly assigns low probability to these, "
-        "confirming a **stochastic recall ceiling (~86%)** that generic ML cannot bypass."
+        "- **Rule-Unexplained Failures:** On the development set, 41 failures (13.67%) are not covered "
+        "by HDF/PWF/OSF rules. Of these, 34 are Tool Wear Failures (TWF). Tool wear is significantly "
+        "higher among these failures (mean 199 vs 107 min, p<0.0001), indicating a real but noisy signal. "
+        "The current model architecture does not exploit this effectively at the available sample size."
     )
+

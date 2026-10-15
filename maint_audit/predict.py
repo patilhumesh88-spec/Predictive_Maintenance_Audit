@@ -1,6 +1,6 @@
 """Score ANY csv in the AI4I schema.
 
-    python -m src.predict --input some.csv --output scored.csv
+    python -m maint_audit.predict --input some.csv --output scored.csv
 
 Bad rows are never silently scored: they get status='invalid: ...' and no risk value.
 """

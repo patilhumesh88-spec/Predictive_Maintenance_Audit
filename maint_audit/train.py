@@ -1,6 +1,6 @@
 """Baseline ladder + leakage-aware validation + final holdout.
 
-Run from the repo root:   python -m src.train
+Run from the repo root:   python -m maint_audit.train
 Outputs: reports/cv_results.csv, reports/per_mode_recall.csv, reports/holdout_metrics.json,
          models/rf_engineered.joblib
 """
@@ -57,7 +57,7 @@ def main(argv=None):
                      **metrics(y_dev, rules_dev)})
         for fs_name, cols in feats.items():
             X = X_dev_all[cols]
-            for name, model in make_models().items():
+            for name, model in make_models(cols).items():
                 p = oof_scores(model, X, y_dev, splitter)
                 rows.append({"scheme": scheme, "features": fs_name, "model": name, **metrics(y_dev, p)})
                 if name == "RandomForest" and fs_name == "engineered":
@@ -97,13 +97,48 @@ def main(argv=None):
     for k in ("PhysicsRules", "RandomForest", "Hybrid"):
         print(k, out[k])
 
+    import hashlib
+    import subprocess
+    import sys
+    import sklearn
+
+    data_hash = hashlib.sha256(DATA_RAW.read_bytes()).hexdigest()
+    try:
+        git_sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()[:12]
+    except Exception:
+        git_sha = "unknown"
+
+    fit_on_label = "all_10k_rows" if args.fit_all else "dev_8k_rows"
     if args.fit_all:
         full = build_features(df)[ENGINEERED_FEATURES]
         model = make_rf().fit(full, df[TARGET].values)
-    joblib.dump({"model": model, "features": ENGINEERED_FEATURES,
-                 "threshold": PRODUCTION_THRESHOLD,
-                 "fit_on": "all" if args.fit_all else "dev"}, MODEL_PATH)
-    print(f"\nSaved model -> {MODEL_PATH}")
+
+    bundle = {
+        "model": model,
+        "features": ENGINEERED_FEATURES,
+        "threshold": PRODUCTION_THRESHOLD,
+        "fit_on": fit_on_label,
+        "metadata": {
+            "model_name": "RandomForest",
+            "dataset": "UCI AI4I 2020 Predictive Maintenance",
+            "dataset_sha256": data_hash,
+            "git_sha": git_sha,
+            "sklearn_version": sklearn.__version__,
+            "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+            "training_rows": len(df) if args.fit_all else len(dev),
+            "training_failures": int(df[TARGET].sum()) if args.fit_all else int(y_dev.sum()),
+            "fit_on": fit_on_label,
+            "threshold": PRODUCTION_THRESHOLD,
+            "feature_list": ENGINEERED_FEATURES,
+            "disclosure": (
+                "The shipped model artifact was refit on all 10,000 rows for maximum inference coverage. "
+                "Reported holdout evaluation metrics come strictly from a development-trained model (8,000 rows)."
+            ),
+            "holdout_evaluation_dev_model": out,
+        },
+    }
+    joblib.dump(bundle, MODEL_PATH)
+    print(f"\nSaved model with rich metadata -> {MODEL_PATH}")
 
 
 if __name__ == "__main__":
