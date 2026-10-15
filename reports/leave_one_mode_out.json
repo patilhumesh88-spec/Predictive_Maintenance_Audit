@@ -1,0 +1,84 @@
+{
+  "description": "Generalization test: Train RF on dev split excluding specific failure mode flag=1; evaluate recall on held-out mode",
+  "tested_modes": {
+    "HDF": {
+      "mode": "HDF",
+      "n_test_samples": 115,
+      "n_test_failures": 115,
+      "n_train_samples": 7885,
+      "n_train_failures": 185,
+      "ml_model": "Random Forest (Engineered Features)",
+      "ml_recall_at_0515": 0.0783,
+      "ml_recall_at_0500": 0.0783,
+      "ml_tp_at_0515": 9,
+      "ml_tp_at_0500": 9,
+      "ml_predicted_scores": {
+        "mean": 0.0908,
+        "std": 0.2378,
+        "median": 0.0097,
+        "min": 0.0,
+        "max": 0.9559
+      },
+      "physics_rules": {
+        "rule_specific_recall": 1.0,
+        "rule_specific_tp": 115,
+        "rule_any_recall": 1.0,
+        "rule_any_tp": 115
+      },
+      "recall_gap_rules_minus_ml_0515": 0.9217
+    },
+    "PWF": {
+      "mode": "PWF",
+      "n_test_samples": 85,
+      "n_test_failures": 85,
+      "n_train_samples": 7915,
+      "n_train_failures": 215,
+      "ml_model": "Random Forest (Engineered Features)",
+      "ml_recall_at_0515": 0.1412,
+      "ml_recall_at_0500": 0.1412,
+      "ml_tp_at_0515": 12,
+      "ml_tp_at_0500": 12,
+      "ml_predicted_scores": {
+        "mean": 0.1405,
+        "std": 0.2955,
+        "median": 0.022,
+        "min": 0.0,
+        "max": 0.9824
+      },
+      "physics_rules": {
+        "rule_specific_recall": 1.0,
+        "rule_specific_tp": 85,
+        "rule_any_recall": 1.0,
+        "rule_any_tp": 85
+      },
+      "recall_gap_rules_minus_ml_0515": 0.8588
+    },
+    "OSF": {
+      "mode": "OSF",
+      "n_test_samples": 77,
+      "n_test_failures": 77,
+      "n_train_samples": 7923,
+      "n_train_failures": 223,
+      "ml_model": "Random Forest (Engineered Features)",
+      "ml_recall_at_0515": 0.1039,
+      "ml_recall_at_0500": 0.1429,
+      "ml_tp_at_0515": 8,
+      "ml_tp_at_0500": 11,
+      "ml_predicted_scores": {
+        "mean": 0.1476,
+        "std": 0.2064,
+        "median": 0.0414,
+        "min": 0.0032,
+        "max": 0.7275
+      },
+      "physics_rules": {
+        "rule_specific_recall": 1.0,
+        "rule_specific_tp": 77,
+        "rule_any_recall": 1.0,
+        "rule_any_tp": 77
+      },
+      "recall_gap_rules_minus_ml_0515": 0.8961
+    }
+  },
+  "conclusion": "Hypothesis confirmed: Machine Learning models trained with a held-out failure mode fail to generalize out-of-distribution to that unseen failure mechanism (recall drops sharply to 7.8% for HDF, 14.1% for PWF, and 10.4% for OSF). In stark contrast, deterministic physics-based rules achieve 100.0% recall on every held-out failure mode because physical boundaries are invariant thermodynamics/kinematics principles independent of training label distributions."
+}

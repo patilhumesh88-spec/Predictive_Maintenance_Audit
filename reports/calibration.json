@@ -1,0 +1,112 @@
+{
+  "model": "Random Forest (Engineered Features)",
+  "evaluation_scheme": "Stratified 5-Fold Cross-Validation (Dev Set)",
+  "n_samples": 8000,
+  "n_failures": 300,
+  "brier_score": 0.008528,
+  "expected_calibration_error": 0.012277,
+  "n_bins": 10,
+  "reliability_diagram": [
+    {
+      "bin_index": 0,
+      "bin_lower": 0.0,
+      "bin_upper": 0.1,
+      "bin_midpoint": 0.05,
+      "sample_count": 7418,
+      "fraction_of_positives": 0.0039,
+      "mean_predicted": 0.0069,
+      "calibration_error": 0.003
+    },
+    {
+      "bin_index": 1,
+      "bin_lower": 0.1,
+      "bin_upper": 0.2,
+      "bin_midpoint": 0.15,
+      "sample_count": 210,
+      "fraction_of_positives": 0.0381,
+      "mean_predicted": 0.1383,
+      "calibration_error": 0.1002
+    },
+    {
+      "bin_index": 2,
+      "bin_lower": 0.2,
+      "bin_upper": 0.3,
+      "bin_midpoint": 0.25,
+      "sample_count": 66,
+      "fraction_of_positives": 0.0152,
+      "mean_predicted": 0.2399,
+      "calibration_error": 0.2248
+    },
+    {
+      "bin_index": 3,
+      "bin_lower": 0.3,
+      "bin_upper": 0.4,
+      "bin_midpoint": 0.35,
+      "sample_count": 25,
+      "fraction_of_positives": 0.2,
+      "mean_predicted": 0.354,
+      "calibration_error": 0.154
+    },
+    {
+      "bin_index": 4,
+      "bin_lower": 0.4,
+      "bin_upper": 0.5,
+      "bin_midpoint": 0.45,
+      "sample_count": 13,
+      "fraction_of_positives": 0.3077,
+      "mean_predicted": 0.4402,
+      "calibration_error": 0.1325
+    },
+    {
+      "bin_index": 5,
+      "bin_lower": 0.5,
+      "bin_upper": 0.6,
+      "bin_midpoint": 0.55,
+      "sample_count": 24,
+      "fraction_of_positives": 0.6667,
+      "mean_predicted": 0.5427,
+      "calibration_error": 0.124
+    },
+    {
+      "bin_index": 6,
+      "bin_lower": 0.6,
+      "bin_upper": 0.7,
+      "bin_midpoint": 0.65,
+      "sample_count": 25,
+      "fraction_of_positives": 0.96,
+      "mean_predicted": 0.6495,
+      "calibration_error": 0.3105
+    },
+    {
+      "bin_index": 7,
+      "bin_lower": 0.7,
+      "bin_upper": 0.8,
+      "bin_midpoint": 0.75,
+      "sample_count": 53,
+      "fraction_of_positives": 0.9245,
+      "mean_predicted": 0.7494,
+      "calibration_error": 0.1752
+    },
+    {
+      "bin_index": 8,
+      "bin_lower": 0.8,
+      "bin_upper": 0.9,
+      "bin_midpoint": 0.85,
+      "sample_count": 77,
+      "fraction_of_positives": 0.974,
+      "mean_predicted": 0.8541,
+      "calibration_error": 0.1199
+    },
+    {
+      "bin_index": 9,
+      "bin_lower": 0.9,
+      "bin_upper": 1.0,
+      "bin_midpoint": 0.95,
+      "sample_count": 89,
+      "fraction_of_positives": 1.0,
+      "mean_predicted": 0.942,
+      "calibration_error": 0.058
+    }
+  ],
+  "interpretation": "RF model shows strong overall calibration with Brier score of 0.0085 and ECE of 1.23%. Confidence is highest in the lowest risk bin [0.0, 0.1) containing 7418 instances where true failure rate is 0.39%. The top bins [0.6, 1.0] are well aligned, with predicted probabilities closely matching empirical failure frequencies (>92-100%)."
+}

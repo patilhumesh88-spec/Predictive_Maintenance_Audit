@@ -1,0 +1,38 @@
+{
+  "holdout_mode": "tail",
+  "n_holdout": 2000,
+  "n_failures": 39,
+  "PhysicsRules": {
+    "precision": 1.0,
+    "recall": 0.7179,
+    "f1": 0.8358,
+    "roc_auc": 0.859,
+    "pr_auc": 0.7234,
+    "TN": 1961,
+    "FP": 0,
+    "FN": 11,
+    "TP": 28
+  },
+  "RandomForest": {
+    "precision": 1.0,
+    "recall": 0.7179,
+    "f1": 0.8358,
+    "roc_auc": 0.972,
+    "pr_auc": 0.7851,
+    "TN": 1961,
+    "FP": 0,
+    "FN": 11,
+    "TP": 28
+  },
+  "Hybrid": {
+    "precision": 1.0,
+    "recall": 0.7179,
+    "f1": 0.8358,
+    "roc_auc": 0.972,
+    "pr_auc": 0.7851,
+    "TN": 1961,
+    "FP": 0,
+    "FN": 11,
+    "TP": 28
+  }
+}

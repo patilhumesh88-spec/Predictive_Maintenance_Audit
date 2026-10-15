@@ -1,0 +1,124 @@
+{
+  "generated_by": "scripts/generate_metrics.py",
+  "git_sha": "f8a9be58693c",
+  "data_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+  "sklearn_version": "1.9.0",
+  "python_version": "3.14.7",
+  "threshold": 0.515,
+  "dataset": {
+    "rows": 10000,
+    "failures": 339,
+    "failure_rate": 0.0339,
+    "label1_without_any_mode": 9,
+    "label0_with_a_mode": 18,
+    "rows_with_multiple_modes": 24
+  },
+  "rules_full_data": {
+    "TP": 287,
+    "FP": 0,
+    "FN": 52,
+    "precision": 1.0,
+    "recall": 0.8466,
+    "coverage": "287/339"
+  },
+  "cv_stratified": {
+    "PhysicsRules": {
+      "precision": 1.0,
+      "recall": 0.8633,
+      "f1": 0.9267,
+      "roc_auc": 0.9317,
+      "pr_auc": 0.8685,
+      "TN": 7700,
+      "FP": 0,
+      "FN": 41,
+      "TP": 259
+    },
+    "RandomForest": {
+      "precision": 0.9545,
+      "recall": 0.84,
+      "f1": 0.8936,
+      "roc_auc": 0.9785,
+      "pr_auc": 0.906,
+      "TN": 7688,
+      "FP": 12,
+      "FN": 48,
+      "TP": 252
+    },
+    "Hybrid": {
+      "precision": 0.9557,
+      "recall": 0.8633,
+      "f1": 0.9072,
+      "roc_auc": 0.9788,
+      "pr_auc": 0.9155,
+      "TN": 7688,
+      "FP": 12,
+      "FN": 41,
+      "TP": 259
+    }
+  },
+  "cv_block": {
+    "RandomForest": {
+      "precision": 0.974,
+      "recall": 0.5,
+      "f1": 0.6608,
+      "roc_auc": 0.9733,
+      "pr_auc": 0.8465,
+      "TN": 7696,
+      "FP": 4,
+      "FN": 150,
+      "TP": 150
+    }
+  },
+  "holdout": {
+    "n_rows": 2000,
+    "n_failures": 39,
+    "modes": {
+      "TWF": 10,
+      "HDF": 0,
+      "PWF": 10,
+      "OSF": 21,
+      "RNF": 0
+    },
+    "PhysicsRules": {
+      "precision": 1.0,
+      "recall": 0.7179,
+      "f1": 0.8358,
+      "roc_auc": 0.859,
+      "pr_auc": 0.7234,
+      "TN": 1961,
+      "FP": 0,
+      "FN": 11,
+      "TP": 28
+    },
+    "RandomForest": {
+      "precision": 1.0,
+      "recall": 0.7179,
+      "f1": 0.8358,
+      "roc_auc": 0.972,
+      "pr_auc": 0.7851,
+      "TN": 1961,
+      "FP": 0,
+      "FN": 11,
+      "TP": 28
+    },
+    "Hybrid": {
+      "precision": 1.0,
+      "recall": 0.7179,
+      "f1": 0.8358,
+      "roc_auc": 0.972,
+      "pr_auc": 0.7851,
+      "TN": 1961,
+      "FP": 0,
+      "FN": 11,
+      "TP": 28
+    }
+  },
+  "rule_unexplained_dev": {
+    "total": 41,
+    "composition": {
+      "TWF": 34,
+      "RNF": 1,
+      "no_flag": 7
+    }
+  }
+}

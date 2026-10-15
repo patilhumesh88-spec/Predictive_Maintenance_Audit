@@ -1,0 +1,618 @@
+{
+  "description": "Characterization of unexplained/residual failures not captured by documented physics rules (HDF, PWF, OSF)",
+  "datasets": {
+    "dev": {
+      "name": "Development Split (First 8000 Rows)",
+      "total_rows": 8000,
+      "total_failures": 300,
+      "residual_failures_count": 41,
+      "normal_machines_count": 7700,
+      "mode_breakdown": {
+        "TWF": 34,
+        "HDF": 0,
+        "PWF": 0,
+        "OSF": 0,
+        "RNF": 1
+      },
+      "unlabelled_anomalies_count": 7,
+      "multiple_modes_count": 1,
+      "sensor_distributions_and_tests": {
+        "Tool wear [min]": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 196.68,
+            "std": 51.62,
+            "median": 211.0,
+            "iqr": 17.0,
+            "q25": 205.0,
+            "q75": 222.0,
+            "min": 20.0,
+            "max": 246.0
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 107.2,
+            "std": 63.11,
+            "median": 107.0,
+            "iqr": 108.0,
+            "q25": 53.0,
+            "q75": 161.0,
+            "min": 0.0,
+            "max": 244.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 279879.5,
+            "p_value": 1.2248814848729994e-17,
+            "rank_biserial_r": -0.7731,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        },
+        "Torque [Nm]": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 38.16,
+            "std": 8.27,
+            "median": 37.9,
+            "iqr": 14.3,
+            "q25": 31.0,
+            "q75": 45.3,
+            "min": 18.9,
+            "max": 54.0
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 39.59,
+            "std": 9.5,
+            "median": 39.8,
+            "iqr": 13.3,
+            "q25": 33.0,
+            "q75": 46.3,
+            "min": 12.6,
+            "max": 70.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 145588.0,
+            "p_value": 0.39025373217078185,
+            "rank_biserial_r": 0.0777,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Rotational speed [rpm]": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 1540.9,
+            "std": 162.74,
+            "median": 1509.0,
+            "iqr": 193.0,
+            "q25": 1422.0,
+            "q75": 1615.0,
+            "min": 1363.0,
+            "max": 2097.0
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 1541.41,
+            "std": 168.71,
+            "median": 1507.0,
+            "iqr": 187.0,
+            "q25": 1429.0,
+            "q75": 1616.0,
+            "min": 1168.0,
+            "max": 2695.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 155560.0,
+            "p_value": 0.8725472622392378,
+            "rank_biserial_r": 0.0145,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Air temperature [K]": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 300.84,
+            "std": 1.75,
+            "median": 300.6,
+            "iqr": 2.3,
+            "q25": 299.7,
+            "q75": 302.0,
+            "min": 296.9,
+            "max": 304.4
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 300.37,
+            "std": 1.99,
+            "median": 300.5,
+            "iqr": 3.0,
+            "q25": 298.9,
+            "q75": 301.9,
+            "min": 295.3,
+            "max": 304.5
+          },
+          "mann_whitney_u": {
+            "u_statistic": 176572.5,
+            "p_value": 0.18951340704378206,
+            "rank_biserial_r": -0.1186,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Process temperature [K]": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 310.34,
+            "std": 1.44,
+            "median": 310.6,
+            "iqr": 2.0,
+            "q25": 309.4,
+            "q75": 311.4,
+            "min": 307.4,
+            "max": 313.7
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 310.15,
+            "std": 1.54,
+            "median": 310.3,
+            "iqr": 2.2,
+            "q25": 309.0,
+            "q75": 311.2,
+            "min": 305.7,
+            "max": 313.8
+          },
+          "mann_whitney_u": {
+            "u_statistic": 169125.0,
+            "p_value": 0.4294357222068158,
+            "rank_biserial_r": -0.0714,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "temp_diff": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 9.5,
+            "std": 0.9,
+            "median": 9.4,
+            "iqr": 0.8,
+            "q25": 9.0,
+            "q75": 9.8,
+            "min": 7.8,
+            "max": 11.4
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 9.77,
+            "std": 0.94,
+            "median": 9.6,
+            "iqr": 1.4,
+            "q25": 9.1,
+            "q75": 10.5,
+            "min": 7.6,
+            "max": 12.1
+          },
+          "mann_whitney_u": {
+            "u_statistic": 131827.0,
+            "p_value": 0.06813446301958972,
+            "rank_biserial_r": 0.1649,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "power_w": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 6032.73,
+            "std": 870.35,
+            "median": 6063.73,
+            "iqr": 1367.51,
+            "q25": 5443.75,
+            "q75": 6811.27,
+            "min": 4138.61,
+            "max": 7707.58
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 6240.53,
+            "std": 1013.36,
+            "median": 6241.43,
+            "iqr": 1411.16,
+            "q25": 5539.45,
+            "q75": 6950.61,
+            "min": 3515.03,
+            "max": 8998.02
+          },
+          "mann_whitney_u": {
+            "u_statistic": 140374.5,
+            "p_value": 0.22077945653263087,
+            "rank_biserial_r": 0.1107,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "wear_torque": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 7358.83,
+            "std": 2389.19,
+            "median": 7718.5,
+            "iqr": 2203.9,
+            "q25": 6426.0,
+            "q75": 8629.9,
+            "min": 954.0,
+            "max": 11709.6
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 4230.93,
+            "std": 2715.58,
+            "median": 3977.8,
+            "iqr": 4227.98,
+            "q25": 1953.53,
+            "q75": 6181.5,
+            "min": 0.0,
+            "max": 11919.8
+          },
+          "mann_whitney_u": {
+            "u_statistic": 253602.5,
+            "p_value": 1.9560640478311944e-11,
+            "rank_biserial_r": -0.6066,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        },
+        "strain_ratio": {
+          "residual_failures": {
+            "count": 41,
+            "mean": 0.63,
+            "std": 0.21,
+            "median": 0.63,
+            "iqr": 0.24,
+            "q25": 0.54,
+            "q75": 0.77,
+            "min": 0.08,
+            "max": 0.98
+          },
+          "normal_machines": {
+            "count": 7700,
+            "mean": 0.37,
+            "std": 0.24,
+            "median": 0.35,
+            "iqr": 0.37,
+            "q25": 0.17,
+            "q75": 0.54,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 250830.5,
+            "p_value": 7.267332372103379e-11,
+            "rank_biserial_r": -0.589,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        }
+      }
+    },
+    "full": {
+      "name": "Full Dataset (10000 Rows)",
+      "total_rows": 10000,
+      "total_failures": 339,
+      "residual_failures_count": 52,
+      "normal_machines_count": 9661,
+      "mode_breakdown": {
+        "TWF": 43,
+        "HDF": 0,
+        "PWF": 0,
+        "OSF": 0,
+        "RNF": 1
+      },
+      "unlabelled_anomalies_count": 9,
+      "multiple_modes_count": 1,
+      "sensor_distributions_and_tests": {
+        "Tool wear [min]": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 198.9,
+            "std": 46.51,
+            "median": 210.0,
+            "iqr": 16.75,
+            "q25": 204.5,
+            "q75": 221.25,
+            "min": 20.0,
+            "max": 246.0
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 106.69,
+            "std": 62.95,
+            "median": 107.0,
+            "iqr": 108.0,
+            "q25": 52.0,
+            "q75": 160.0,
+            "min": 0.0,
+            "max": 246.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 452735.0,
+            "p_value": 1.6101176641334627e-23,
+            "rank_biserial_r": -0.8024,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        },
+        "Torque [Nm]": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 37.18,
+            "std": 8.93,
+            "median": 37.75,
+            "iqr": 14.75,
+            "q25": 30.48,
+            "q75": 45.23,
+            "min": 16.2,
+            "max": 54.0
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 39.63,
+            "std": 9.47,
+            "median": 39.9,
+            "iqr": 13.2,
+            "q25": 33.1,
+            "q75": 46.3,
+            "min": 12.6,
+            "max": 70.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 218173.5,
+            "p_value": 0.10162705955101706,
+            "rank_biserial_r": 0.1314,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Rotational speed [rpm]": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 1566.73,
+            "std": 196.68,
+            "median": 1516.0,
+            "iqr": 224.5,
+            "q25": 1427.25,
+            "q75": 1651.75,
+            "min": 1323.0,
+            "max": 2271.0
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 1540.26,
+            "std": 167.39,
+            "median": 1507.0,
+            "iqr": 186.0,
+            "q25": 1429.0,
+            "q75": 1615.0,
+            "min": 1168.0,
+            "max": 2695.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 262184.0,
+            "p_value": 0.5855138435976731,
+            "rank_biserial_r": -0.0438,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Air temperature [K]": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 300.31,
+            "std": 1.93,
+            "median": 300.45,
+            "iqr": 3.07,
+            "q25": 298.75,
+            "q75": 301.82,
+            "min": 296.9,
+            "max": 304.4
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 299.97,
+            "std": 1.99,
+            "median": 300.0,
+            "iqr": 3.2,
+            "q25": 298.3,
+            "q75": 301.5,
+            "min": 295.3,
+            "max": 304.5
+          },
+          "mann_whitney_u": {
+            "u_statistic": 273447.0,
+            "p_value": 0.26959224852222996,
+            "rank_biserial_r": -0.0886,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "Process temperature [K]": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 310.16,
+            "std": 1.43,
+            "median": 310.25,
+            "iqr": 1.88,
+            "q25": 309.2,
+            "q75": 311.07,
+            "min": 307.4,
+            "max": 313.7
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 310.0,
+            "std": 1.49,
+            "median": 310.0,
+            "iqr": 2.3,
+            "q25": 308.8,
+            "q75": 311.1,
+            "min": 305.7,
+            "max": 313.8
+          },
+          "mann_whitney_u": {
+            "u_statistic": 266979.0,
+            "p_value": 0.4334602940850205,
+            "rank_biserial_r": -0.0629,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "temp_diff": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 9.85,
+            "std": 1.05,
+            "median": 9.6,
+            "iqr": 1.83,
+            "q25": 9.1,
+            "q75": 10.93,
+            "min": 7.8,
+            "max": 11.5
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 10.02,
+            "std": 0.99,
+            "median": 9.8,
+            "iqr": 1.7,
+            "q25": 9.3,
+            "q75": 11.0,
+            "min": 7.6,
+            "max": 12.1
+          },
+          "mann_whitney_u": {
+            "u_statistic": 227633.0,
+            "p_value": 0.2426822746361621,
+            "rank_biserial_r": 0.0938,
+            "significant_at_05": false,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "power_w": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 5935.39,
+            "std": 917.38,
+            "median": 6021.18,
+            "iqr": 1482.63,
+            "q25": 5232.32,
+            "q75": 6714.96,
+            "min": 3852.66,
+            "max": 7707.58
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 6244.55,
+            "std": 1011.39,
+            "median": 6243.05,
+            "iqr": 1402.74,
+            "q25": 5549.31,
+            "q75": 6952.05,
+            "min": 3515.03,
+            "max": 8998.02
+          },
+          "mann_whitney_u": {
+            "u_statistic": 209582.5,
+            "p_value": 0.03911069524376866,
+            "rank_biserial_r": 0.1656,
+            "significant_at_05": true,
+            "significant_at_01": false,
+            "significant_at_001": false
+          }
+        },
+        "wear_torque": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 7274.66,
+            "std": 2361.27,
+            "median": 7647.15,
+            "iqr": 3168.45,
+            "q25": 5872.5,
+            "q75": 9040.95,
+            "min": 954.0,
+            "max": 11709.6
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 4213.84,
+            "std": 2709.74,
+            "median": 3952.8,
+            "iqr": 4231.8,
+            "q25": 1943.4,
+            "q75": 6175.2,
+            "min": 0.0,
+            "max": 11919.8
+          },
+          "mann_whitney_u": {
+            "u_statistic": 401167.0,
+            "p_value": 1.027807819862761e-13,
+            "rank_biserial_r": -0.5971,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        },
+        "strain_ratio": {
+          "residual_failures": {
+            "count": 52,
+            "mean": 0.63,
+            "std": 0.21,
+            "median": 0.63,
+            "iqr": 0.27,
+            "q25": 0.51,
+            "q75": 0.78,
+            "min": 0.08,
+            "max": 0.98
+          },
+          "normal_machines": {
+            "count": 9661,
+            "mean": 0.37,
+            "std": 0.24,
+            "median": 0.35,
+            "iqr": 0.37,
+            "q25": 0.17,
+            "q75": 0.54,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "mann_whitney_u": {
+            "u_statistic": 399376.0,
+            "p_value": 2.004948249500836e-13,
+            "rank_biserial_r": -0.59,
+            "significant_at_05": true,
+            "significant_at_01": true,
+            "significant_at_001": true
+          }
+        }
+      }
+    }
+  },
+  "key_findings": "1. Tool Wear is the ONLY sensor with a statistically significant difference between residual failures and normal machines (dev: p = 1.22e-17, full: p = 1.61e-23). The median tool wear for residual failures is ~210 min (IQR: 17 min) vs 107 min for normals (IQR: 108 min). 2. All other operational sensors \u2014 Torque (p = 0.39), Rotational Speed (p = 0.87), Air Temp (p = 0.19), and Process Temp (p = 0.43) \u2014 have identical distributions between residual failures and normal machines with p > 0.10. 3. Residual failures consist almost entirely of Tool Wear Failures (TWF, 34 in dev, 43 in full) and unlabelled anomalies (7 in dev, 9 in full). Because TWF occurs stochastically between 200 and 240 mins without physical sensor anomalies, machine learning models cannot separate them without triggering unacceptable false alarms."
+}

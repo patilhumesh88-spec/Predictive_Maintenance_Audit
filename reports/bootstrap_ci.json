@@ -1,0 +1,235 @@
+{
+  "n_dev_samples": 8000,
+  "n_dev_failures": 300,
+  "n_bootstraps": 2000,
+  "production_threshold": 0.515,
+  "systems": {
+    "rules": {
+      "name": "Physics Rules",
+      "metrics": {
+        "ap": {
+          "observed": 0.8685,
+          "bootstrap_mean": 0.8672,
+          "bootstrap_std": 0.0193,
+          "ci_95_lower": 0.8281,
+          "ci_95_upper": 0.9034
+        },
+        "roc_auc": {
+          "observed": 0.9317,
+          "bootstrap_mean": 0.931,
+          "bootstrap_std": 0.01,
+          "ci_95_lower": 0.9107,
+          "ci_95_upper": 0.9498
+        },
+        "f1": {
+          "observed": 0.9267,
+          "bootstrap_mean": 0.9258,
+          "bootstrap_std": 0.0116,
+          "ci_95_lower": 0.9019,
+          "ci_95_upper": 0.9472
+        },
+        "precision": {
+          "observed": 1.0,
+          "bootstrap_mean": 1.0,
+          "bootstrap_std": 0.0,
+          "ci_95_lower": 1.0,
+          "ci_95_upper": 1.0
+        },
+        "recall": {
+          "observed": 0.8633,
+          "bootstrap_mean": 0.862,
+          "bootstrap_std": 0.02,
+          "ci_95_lower": 0.8213,
+          "ci_95_upper": 0.8997
+        }
+      }
+    },
+    "ml": {
+      "name": "Random Forest (Engineered)",
+      "metrics": {
+        "ap": {
+          "observed": 0.906,
+          "bootstrap_mean": 0.9053,
+          "bootstrap_std": 0.0145,
+          "ci_95_lower": 0.8763,
+          "ci_95_upper": 0.9323
+        },
+        "roc_auc": {
+          "observed": 0.9785,
+          "bootstrap_mean": 0.9784,
+          "bootstrap_std": 0.0055,
+          "ci_95_lower": 0.9668,
+          "ci_95_upper": 0.9884
+        },
+        "f1": {
+          "observed": 0.8936,
+          "bootstrap_mean": 0.8927,
+          "bootstrap_std": 0.014,
+          "ci_95_lower": 0.8633,
+          "ci_95_upper": 0.9181
+        },
+        "precision": {
+          "observed": 0.9545,
+          "bootstrap_mean": 0.9544,
+          "bootstrap_std": 0.0127,
+          "ci_95_lower": 0.9286,
+          "ci_95_upper": 0.9776
+        },
+        "recall": {
+          "observed": 0.84,
+          "bootstrap_mean": 0.8387,
+          "bootstrap_std": 0.0216,
+          "ci_95_lower": 0.7942,
+          "ci_95_upper": 0.879
+        }
+      }
+    },
+    "hybrid": {
+      "name": "Hybrid (Rules OR RF)",
+      "metrics": {
+        "ap": {
+          "observed": 0.9155,
+          "bootstrap_mean": 0.9148,
+          "bootstrap_std": 0.0139,
+          "ci_95_lower": 0.8863,
+          "ci_95_upper": 0.9405
+        },
+        "roc_auc": {
+          "observed": 0.9788,
+          "bootstrap_mean": 0.9787,
+          "bootstrap_std": 0.0055,
+          "ci_95_lower": 0.9671,
+          "ci_95_upper": 0.9886
+        },
+        "f1": {
+          "observed": 0.9072,
+          "bootstrap_mean": 0.9062,
+          "bootstrap_std": 0.0129,
+          "ci_95_lower": 0.8801,
+          "ci_95_upper": 0.9307
+        },
+        "precision": {
+          "observed": 0.9557,
+          "bootstrap_mean": 0.9556,
+          "bootstrap_std": 0.0123,
+          "ci_95_lower": 0.9303,
+          "ci_95_upper": 0.978
+        },
+        "recall": {
+          "observed": 0.8633,
+          "bootstrap_mean": 0.862,
+          "bootstrap_std": 0.02,
+          "ci_95_lower": 0.8213,
+          "ci_95_upper": 0.8997
+        }
+      }
+    }
+  },
+  "differences": {
+    "hybrid_minus_rules": {
+      "label": "Hybrid vs Physics Rules",
+      "deltas": {
+        "ap": {
+          "observed_delta": 0.0471,
+          "mean_delta": 0.0476,
+          "ci_95_lower": 0.0312,
+          "ci_95_upper": 0.0657
+        },
+        "roc_auc": {
+          "observed_delta": 0.0471,
+          "mean_delta": 0.0477,
+          "ci_95_lower": 0.0326,
+          "ci_95_upper": 0.0644
+        },
+        "f1": {
+          "observed_delta": -0.0195,
+          "mean_delta": -0.0195,
+          "ci_95_lower": -0.0308,
+          "ci_95_upper": -0.0096
+        },
+        "precision": {
+          "observed_delta": -0.0443,
+          "mean_delta": -0.0444,
+          "ci_95_lower": -0.0697,
+          "ci_95_upper": -0.022
+        },
+        "recall": {
+          "observed_delta": 0.0,
+          "mean_delta": 0.0,
+          "ci_95_lower": 0.0,
+          "ci_95_upper": 0.0
+        }
+      }
+    },
+    "hybrid_minus_ml": {
+      "label": "Hybrid vs RF Engineered",
+      "deltas": {
+        "ap": {
+          "observed_delta": 0.0095,
+          "mean_delta": 0.0096,
+          "ci_95_lower": 0.0037,
+          "ci_95_upper": 0.0173
+        },
+        "roc_auc": {
+          "observed_delta": 0.0003,
+          "mean_delta": 0.0003,
+          "ci_95_lower": 0.0001,
+          "ci_95_upper": 0.0005
+        },
+        "f1": {
+          "observed_delta": 0.0136,
+          "mean_delta": 0.0136,
+          "ci_95_lower": 0.0043,
+          "ci_95_upper": 0.0245
+        },
+        "precision": {
+          "observed_delta": 0.0012,
+          "mean_delta": 0.0012,
+          "ci_95_lower": 0.0003,
+          "ci_95_upper": 0.0025
+        },
+        "recall": {
+          "observed_delta": 0.0233,
+          "mean_delta": 0.0233,
+          "ci_95_lower": 0.0072,
+          "ci_95_upper": 0.0412
+        }
+      }
+    },
+    "ml_minus_rules": {
+      "label": "RF Engineered vs Physics Rules",
+      "deltas": {
+        "ap": {
+          "observed_delta": 0.0375,
+          "mean_delta": 0.0381,
+          "ci_95_lower": 0.0198,
+          "ci_95_upper": 0.058
+        },
+        "roc_auc": {
+          "observed_delta": 0.0469,
+          "mean_delta": 0.0474,
+          "ci_95_lower": 0.0324,
+          "ci_95_upper": 0.064
+        },
+        "f1": {
+          "observed_delta": -0.033,
+          "mean_delta": -0.0331,
+          "ci_95_lower": -0.0487,
+          "ci_95_upper": -0.0192
+        },
+        "precision": {
+          "observed_delta": -0.0455,
+          "mean_delta": -0.0456,
+          "ci_95_lower": -0.0714,
+          "ci_95_upper": -0.0224
+        },
+        "recall": {
+          "observed_delta": -0.0233,
+          "mean_delta": -0.0233,
+          "ci_95_lower": -0.0412,
+          "ci_95_upper": -0.0072
+        }
+      }
+    }
+  }
+}

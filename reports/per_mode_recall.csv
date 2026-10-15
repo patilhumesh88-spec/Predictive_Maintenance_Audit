@@ -1,0 +1,6 @@
+mode,n,rules_recall,rf_recall,hybrid_recall
+TWF,36,0.056,0.056,0.056
+HDF,115,1.0,0.991,1.0
+PWF,85,1.0,0.941,1.0
+OSF,77,1.0,1.0,1.0
+RNF,19,0.0,0.0,0.0
