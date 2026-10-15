@@ -6,7 +6,12 @@ __pycache__/
 .env
 
 data/raw/*
+!data/raw/ai4i2020.csv
 data/processed/*
+build/
+dist/
+*.egg-info/
+.pytest_cache/
 
 .DS_Store
 Thumbs.db

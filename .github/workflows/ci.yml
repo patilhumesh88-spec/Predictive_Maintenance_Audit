@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, portfolio-upgrade]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Ruff
+        run: pip install ruff
+      - name: Run Ruff Linter
+        run: ruff check maint_audit/ tests/ scripts/ dashboard/
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,api]"
+      - name: Run Pytest
+        run: pytest tests/ -v
+      - name: Run Quality Verification
+        run: python scripts/verify_all.py
+
+  notebook-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" jupyter nbconvert
+      - name: Headless Notebook Execution Smoke Test
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/01_data_audit.ipynb --output /dev/null
+          jupyter nbconvert --to notebook --execute notebooks/08_final_evaluation.ipynb --output /dev/null
