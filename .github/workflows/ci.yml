@@ -53,3 +53,10 @@ jobs:
         run: |
           jupyter nbconvert --to notebook --execute notebooks/01_data_audit.ipynb --output /dev/null
           jupyter nbconvert --to notebook --execute notebooks/08_final_evaluation.ipynb --output /dev/null
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t maint-audit:latest .
