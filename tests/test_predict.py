@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.config import PRODUCTION_THRESHOLD
-from src.features import ENGINEERED_FEATURES, build_features
-from src.models import make_rf
-from src.predict import predict_frame
+from maint_audit.config import PRODUCTION_THRESHOLD
+from maint_audit.features import ENGINEERED_FEATURES, build_features
+from maint_audit.models import make_rf
+from maint_audit.predict import predict_frame
 from tests.helpers import frame, row, synthetic
 
 
@@ -73,7 +73,7 @@ def test_extra_columns_and_ids_pass_through_safely():
 
 
 def test_leakage_columns_are_never_model_features():
-    from src.config import ID_COLS, MODE_COLS
+    from maint_audit.config import ID_COLS, MODE_COLS
     assert not set(ENGINEERED_FEATURES) & set(MODE_COLS + ID_COLS)
 
 

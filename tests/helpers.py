@@ -17,7 +17,7 @@ def frame(*rows):
 
 def synthetic(n=600, seed=0):
     """Small synthetic frame with the AI4I schema and a rule-driven label (for model fixtures)."""
-    from src.rules import rule_flags
+    from maint_audit.rules import rule_flags
     rng = np.random.default_rng(seed)
     df = pd.DataFrame({
         "Air temperature [K]": rng.normal(300, 2, n).round(1),
