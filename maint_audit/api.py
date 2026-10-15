@@ -1,15 +1,13 @@
 """FastAPI inference service for failure risk scoring."""
-from typing import List, Optional, Literal
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field, ConfigDict
-import pandas as pd
-import joblib
+from typing import Literal
 
-from .config import (
-    MODEL_PATH, PRODUCTION_THRESHOLD,
-    AIR, PROC, RPM, TORQUE, WEAR, TYPE
-)
+import joblib
+import pandas as pd
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, ConfigDict, Field
+
+from .config import AIR, MODEL_PATH, PROC, PRODUCTION_THRESHOLD, RPM, TORQUE, TYPE, WEAR
 from .predict import predict_frame
 
 bundle = None
@@ -41,8 +39,8 @@ class TelemetryRecord(BaseModel):
     torque_nm: float = Field(..., ge=0.0, le=500.0, alias="Torque [Nm]", description="Torque in Nm")
     tool_wear_min: float = Field(..., ge=0.0, le=1000.0, alias="Tool wear [min]", description="Cumulative tool wear in minutes")
     machine_type: Literal["L", "M", "H"] = Field(..., alias="Type", description="Product variant quality (L, M, H)")
-    udi: Optional[int] = Field(None, alias="UDI")
-    product_id: Optional[str] = Field(None, alias="Product ID")
+    udi: int | None = Field(None, alias="UDI")
+    product_id: str | None = Field(None, alias="Product ID")
 
 
 class PredictionResponse(BaseModel):
@@ -54,8 +52,8 @@ class PredictionResponse(BaseModel):
     risk_flag: bool
     likely_mode: str
     status: str
-    udi: Optional[int] = None
-    product_id: Optional[str] = None
+    udi: int | None = None
+    product_id: str | None = None
 
 
 @app.get("/health")
@@ -68,7 +66,7 @@ def health():
     }
 
 
-def _record_to_df(records: List[TelemetryRecord]) -> pd.DataFrame:
+def _record_to_df(records: list[TelemetryRecord]) -> pd.DataFrame:
     rows = []
     for r in records:
         d = {
@@ -108,8 +106,8 @@ def predict_single(record: TelemetryRecord):
     )
 
 
-@app.post("/predict/batch", response_model=List[PredictionResponse])
-def predict_batch(records: List[TelemetryRecord]):
+@app.post("/predict/batch", response_model=list[PredictionResponse])
+def predict_batch(records: list[TelemetryRecord]):
     if bundle is None:
         raise HTTPException(status_code=503, detail="Model bundle not loaded")
     if not records:

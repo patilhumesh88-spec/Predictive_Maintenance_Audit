@@ -10,11 +10,10 @@ import sys
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from maint_audit.config import DATA_RAW, PRODUCTION_THRESHOLD, TARGET, MODE_COLS
+from maint_audit.config import DATA_RAW, MODE_COLS, PRODUCTION_THRESHOLD, TARGET
 from maint_audit.data import label_consistency_report, load_raw
 from maint_audit.features import ENGINEERED_FEATURES, build_features
 from maint_audit.models import make_rf

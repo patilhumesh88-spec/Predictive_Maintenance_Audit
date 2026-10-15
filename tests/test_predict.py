@@ -66,7 +66,10 @@ def test_missing_columns_raise_value_error():
 
 def test_extra_columns_and_ids_pass_through_safely():
     b = _bundle()
-    df = frame(row()); df["UDI"] = 7; df["Product ID"] = "M1"; df["TWF"] = 1
+    df = frame(row())
+    df["UDI"] = 7
+    df["Product ID"] = "M1"
+    df["TWF"] = 1
     out = predict_frame(df, b)
     assert out.loc[0, "UDI"] == 7 and out.loc[0, "Product ID"] == "M1"
     assert "TWF" not in out.columns

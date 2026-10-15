@@ -1,20 +1,17 @@
 import os
 import sys
-import streamlit as st
-import pandas as pd
-import numpy as np
-import joblib
 from pathlib import Path
+
+import joblib
+import pandas as pd
+import streamlit as st
 
 # Ensure the repository root is importable when running under Streamlit Cloud
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from maint_audit.config import (
-    MODEL_PATH, PRODUCTION_THRESHOLD, AIR, PROC, RPM, TORQUE, WEAR, TYPE,
-    SENSOR_COLS, REQUIRED_INPUT_COLS
-)
-from maint_audit.predict import predict_frame
+from maint_audit.config import AIR, MODEL_PATH, PROC, PRODUCTION_THRESHOLD, RPM, TORQUE, TYPE, WEAR
 from maint_audit.features import build_features
+from maint_audit.predict import predict_frame
 
 # Set page config
 st.set_page_config(
@@ -128,21 +125,21 @@ with col_results:
             col_r1, col_r2, col_r3 = st.columns(3)
 
             with col_r1:
-                st.markdown(f"**Heat Dissipation (HDF)**")
+                st.markdown("**Heat Dissipation (HDF)**")
                 st.write("Triggered" if hdf_trig else "Normal")
                 st.caption("Criteria: Temp Diff < 8.6 K & Speed < 1380 RPM")
                 if hdf_trig:
                     st.info(f"Speed ({rot_speed:.1f} RPM) < 1380 and Temp Diff ({derived.loc[0, 'temp_diff']:.1f} K) < 8.6")
 
             with col_r2:
-                st.markdown(f"**Power Failure (PWF)**")
+                st.markdown("**Power Failure (PWF)**")
                 st.write("Triggered" if pwf_trig else "Normal")
                 st.caption("Criteria: Power < 3500 W or > 9000 W")
                 if pwf_trig:
                     st.info(f"Power ({derived.loc[0, 'power_w']:.1f} W) is outside safe operating window [3500 W, 9000 W]")
 
             with col_r3:
-                st.markdown(f"**Overstrain Failure (OSF)**")
+                st.markdown("**Overstrain Failure (OSF)**")
                 st.write("Triggered" if osf_trig else "Normal")
                 st.caption(f"Criteria: Strain > {limit} min·Nm for Type {typ}")
                 if osf_trig:

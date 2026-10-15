@@ -31,7 +31,7 @@ def main():
                    "hackathon", "competition", "submission", "demo video"]
     hits = []
     for p in ROOT.rglob("*"):
-        if p.is_dir() or ".git" in p.parts or ".venv" in p.parts or "__pycache__" in p.parts:
+        if p.is_dir() or any(x in p.parts for x in (".git", ".venv", "__pycache__", ".ruff_cache", ".pytest_cache")):
             continue
         if p.suffix in (".pyc", ".joblib", ".png", ".jpg", ".gif", ".ico"):
             continue
@@ -61,7 +61,7 @@ def main():
     path_hits = []
     path_pattern = re.compile(r"[Cc]:\\[Uu]sers\\|/home/\w+|/Users/\w+", re.IGNORECASE)
     for p in ROOT.rglob("*"):
-        if p.is_dir() or ".git" in p.parts or ".venv" in p.parts or "__pycache__" in p.parts:
+        if p.is_dir() or any(x in p.parts for x in (".git", ".venv", "__pycache__", ".ruff_cache", ".pytest_cache")):
             continue
         if p.suffix in (".pyc", ".joblib", ".png", ".jpg", ".gif", ".ico"):
             continue
