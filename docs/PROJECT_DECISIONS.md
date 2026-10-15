@@ -1,7 +1,7 @@
-# Project Decisions — ALGOTHON ALG-DATA-02
+# Project Decisions
 
 ## Dataset
-- UCI AI4I 2020 Predictive Maintenance Dataset
+- UCI AI4I 2020 Predictive Maintenance Dataset (DOI: 10.24432/C5HS5C, CC BY 4.0)
 - 10,000 rows, 14 original columns, no missing values, no duplicates
 - Overall failure rate: 3.39% (339 failures)
 
@@ -34,7 +34,7 @@
 - Ordered block 5-fold CV: robustness stress test ONLY; NOT temporal forecasting
 
 ## Selected Model & Threshold
-- Production model: Random Forest with OneHotEncoder(Type, handle_unknown="ignore") + engineered features
+- Model: Random Forest with OneHotEncoder(Type, handle_unknown="ignore") + engineered features
 - Threshold: **0.515** — F1-optimal on development OOF predictions (Notebook 08); frozen, NOT holdout-tuned
 
 ## Final Decision Logic
@@ -48,13 +48,20 @@
 - ML: AP=0.785, ROC-AUC=0.972, same binary result as rules on this holdout
 - Hybrid: identical binary result (rules already cover the 28 detected failures)
 
+## Shipped Model vs. Reported Metrics
+- The shipped `models/rf_engineered.joblib` was refit on all 10,000 rows for maximum inference coverage.
+- Holdout metrics above come from a model trained on only the 8,000-row development set.
+- This is disclosed in the model card and README.
+
 ## Terminology We Do NOT Use
 - "unpredictable" / "provably unpredictable" for residual failures
 - "temporal forecasting" for ordered-block CV
 - "ML-only (unexplained)" — use "ML risk detected", "No documented rule triggered", "Residual statistical risk"
+- "no physical warning indicators" for TWF (tool wear IS a signal)
 
 ## Limitations
 - Dataset is synthetic; no real factory deployment claim
 - Ordered block is harder than shuffled CV but is a stress test, not forecasting
 - Final holdout failure rate (1.95%) is lower than development (3.75%) — report as distribution limitation
-- TWF/RNF residual failures are not explained by documented rules
+- TWF/RNF residual failures have a tool wear signal but are rare and noisy
+- Holdout has 0 HDF rows — HDF rule generalization is untested on holdout

@@ -1,6 +1,6 @@
-# Architecture — ALGOTHON ALG-DATA-02
+# Architecture
 
-## Data flow (production)
+## Data flow
 
 ```
 Sensor Input
@@ -42,7 +42,8 @@ final_decision = rule_triggered OR ml_decision
 ## Final evaluation
 - Notebook 08 final untouched holdout (last 2,000 rows, 39 failures) scored once after all modeling decisions were frozen.
 
-## Production model
+## Model artifact
 - `models/rf_engineered.joblib`
-- Loaded only for inference by the dashboard / `src/predict.py`
-- No training happens inside the dashboard.
+- **Important:** The shipped model was refit on all 10,000 rows for maximum inference coverage. Holdout metrics in the README come from a dev-only-trained model. See `model_card.md` for details.
+- Loaded only for inference by the dashboard / `maint_audit/predict.py`
+- No training happens during inference.

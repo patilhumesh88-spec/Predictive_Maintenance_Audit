@@ -1,4 +1,4 @@
-from src.rules import rule_flags
+from maint_audit.rules import rule_flags
 from tests.helpers import frame, row
 
 
