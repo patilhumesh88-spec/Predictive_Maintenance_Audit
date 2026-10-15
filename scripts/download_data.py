@@ -24,7 +24,8 @@ def download():
     DEST.parent.mkdir(parents=True, exist_ok=True)
 
     print("Downloading from UCI repository...")
-    import zipfile, io
+    import io
+    import zipfile
     try:
         resp = urllib.request.urlopen(URL)
         z = zipfile.ZipFile(io.BytesIO(resp.read()))

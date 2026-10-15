@@ -12,8 +12,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from .config import (DATA_RAW, MODE_COLS, MODEL_PATH, MODELS_DIR,
-                     PRODUCTION_THRESHOLD, RANDOM_STATE, REPORTS_DIR, TARGET)
+from .config import DATA_RAW, MODE_COLS, MODEL_PATH, MODELS_DIR, PRODUCTION_THRESHOLD, RANDOM_STATE, REPORTS_DIR, TARGET
 from .data import label_consistency_report, load_raw
 from .features import ENGINEERED_FEATURES, RAW_FEATURES, build_features
 from .models import make_models, make_rf
@@ -39,7 +38,8 @@ def main(argv=None):
                     help="after reporting, refit the saved model on ALL rows (dev + holdout)")
     args = ap.parse_args(argv)
 
-    REPORTS_DIR.mkdir(exist_ok=True); MODELS_DIR.mkdir(exist_ok=True)
+    REPORTS_DIR.mkdir(exist_ok=True)
+    MODELS_DIR.mkdir(exist_ok=True)
     df = load_raw(args.data)
     print("Label audit:", json.dumps(label_consistency_report(df)))
 
@@ -81,14 +81,17 @@ def main(argv=None):
             pm.append({"mode": m, "n": int(mask.sum()), "rules_recall": round(float(rule_pred[mask].mean()), 3),
                        "rf_recall": round(float(ml_pred[mask].mean()), 3),
                        "hybrid_recall": round(float((rule_pred | ml_pred)[mask].mean()), 3)})
-    pm = pd.DataFrame(pm); pm.to_csv(REPORTS_DIR / "per_mode_recall.csv", index=False)
+    pm = pd.DataFrame(pm)
+    pm.to_csv(REPORTS_DIR / "per_mode_recall.csv", index=False)
     print("\n=== Per-failure-mode recall (dev, stratified OOF) ===")
     print(pm.to_string(index=False))
 
     # final holdout: fitted on dev only, scored ONCE
     model = make_rf().fit(X_dev_all[ENGINEERED_FEATURES], y_dev)
-    Xh = build_features(hold)[ENGINEERED_FEATURES]; yh = hold[TARGET].values
-    ph = model.predict_proba(Xh)[:, 1]; rh = rule_flags(hold)["rule_any"].astype(float).values
+    Xh = build_features(hold)[ENGINEERED_FEATURES]
+    yh = hold[TARGET].values
+    ph = model.predict_proba(Xh)[:, 1]
+    rh = rule_flags(hold)["rule_any"].astype(float).values
     out = {"holdout_mode": args.holdout, "n_holdout": int(len(hold)), "n_failures": int(yh.sum()),
            "PhysicsRules": metrics(yh, rh), "RandomForest": metrics(yh, ph),
            "Hybrid": metrics(yh, np.maximum(rh, ph))}
@@ -100,6 +103,7 @@ def main(argv=None):
     import hashlib
     import subprocess
     import sys
+
     import sklearn
 
     data_hash = hashlib.sha256(DATA_RAW.read_bytes()).hexdigest()

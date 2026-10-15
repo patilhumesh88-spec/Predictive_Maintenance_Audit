@@ -1,11 +1,10 @@
 """Model factories. Production model: Random Forest + one-hot Type + engineered features."""
+from sklearn.compose import ColumnTransformer
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
-
-from sklearn.compose import ColumnTransformer
 
 from .config import RANDOM_STATE
 

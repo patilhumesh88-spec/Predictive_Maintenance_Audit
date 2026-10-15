@@ -15,10 +15,12 @@ Outputs saved to reports/:
 - reports/residual_analysis.json
 """
 import sys
+
 sys.path.insert(0, ".")
 
 import json
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -31,15 +33,12 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
-from sklearn.model_selection import StratifiedKFold
-
 from src.config import (
     DATA_RAW,
     MODE_COLS,
     PRODUCTION_THRESHOLD,
     RANDOM_STATE,
     REPORTS_DIR,
-    SENSOR_COLS,
     TARGET,
 )
 from src.data import load_raw
@@ -319,7 +318,7 @@ def run_probability_calibration(dev_df: pd.DataFrame, oof_ml: np.ndarray):
     bin_data = []
     ece = 0.0
 
-    print(f"\nReliability Diagram Data (10 bins):")
+    print("\nReliability Diagram Data (10 bins):")
     print(f"{'Bin Range':<15} | {'Midpoint':<8} | {'Count':<7} | {'Fraction Positives':<20} | {'Mean Predicted':<15} | {'Error':<8}")
     print("-" * 85)
 
@@ -328,10 +327,7 @@ def run_probability_calibration(dev_df: pd.DataFrame, oof_ml: np.ndarray):
         hi = float(bin_edges[i + 1])
         mid = float(bin_midpoints[i])
 
-        if i == n_bins - 1:
-            mask = (oof_ml >= lo) & (oof_ml <= hi)
-        else:
-            mask = (oof_ml >= lo) & (oof_ml < hi)
+        mask = (oof_ml >= lo) & (oof_ml <= hi) if (i == n_bins - 1) else (oof_ml >= lo) & (oof_ml < hi)
 
         count = int(mask.sum())
         if count > 0:
@@ -431,7 +427,7 @@ def run_cost_threshold_analysis(dev_df: pd.DataFrame, oof_ml: np.ndarray):
     benchmark_ratios = [1, 2, 3, 5, 10, 15, 20, 30, 40, 50, 75, 100]
 
     ratio_results = []
-    print(f"\nCost Sensitivity Analysis Across Benchmark Ratios (C_miss : C_fa):")
+    print("\nCost Sensitivity Analysis Across Benchmark Ratios (C_miss : C_fa):")
     print(f"{'Ratio':<8} | {'Opt Thr':<8} | {'Min Cost':<9} | {'Cost @ 0.515':<12} | {'Savings ($)':<11} | {'Savings (%)':<11} | {'Opt Rec':<8} | {'Opt Prec':<8}")
     print("-" * 95)
 
@@ -599,7 +595,7 @@ def run_residual_failure_analysis(full_df: pd.DataFrame, dev_df: pd.DataFrame):
             "sensor_distributions_and_tests": {},
         }
 
-        print(f"\nMann-Whitney U Tests & Sensor Distribution Comparison:")
+        print("\nMann-Whitney U Tests & Sensor Distribution Comparison:")
         print(f"{'Feature':<25} | {'Fail Median':<12} | {'Norm Median':<12} | {'Fail IQR':<10} | {'Norm IQR':<10} | {'U Stat':<12} | {'p-value':<12} | {'Sig (a=0.01)':<12}")
         print("-" * 115)
 

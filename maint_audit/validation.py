@@ -9,8 +9,14 @@ Two CV schemes on purpose:
 import numpy as np
 import pandas as pd
 from sklearn.base import clone
-from sklearn.metrics import (average_precision_score, confusion_matrix, f1_score,
-                             precision_score, recall_score, roc_auc_score)
+from sklearn.metrics import (
+    average_precision_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.model_selection import KFold, StratifiedKFold
 
 from .config import RANDOM_STATE

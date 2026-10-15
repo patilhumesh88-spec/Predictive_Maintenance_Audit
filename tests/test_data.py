@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from maint_audit.config import DATA_RAW, MODE_COLS, TARGET
+from maint_audit.config import DATA_RAW
 from maint_audit.data import label_consistency_report, load_raw, validate_inputs
 from maint_audit.rules import rule_flags
 from tests.helpers import frame, row

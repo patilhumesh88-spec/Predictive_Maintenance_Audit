@@ -6,7 +6,6 @@ Bad rows are never silently scored: they get status='invalid: ...' and no risk v
 """
 import argparse
 import sys
-from typing import Optional
 
 import joblib
 import numpy as np
@@ -18,7 +17,7 @@ from .features import build_features
 from .rules import rule_flags
 
 
-def predict_frame(df: pd.DataFrame, bundle: dict, threshold: Optional[float] = None) -> pd.DataFrame:
+def predict_frame(df: pd.DataFrame, bundle: dict, threshold: float | None = None) -> pd.DataFrame:
     thr = bundle.get("threshold", PRODUCTION_THRESHOLD) if threshold is None else threshold
     status = validate_inputs(df)            # raises ValueError if required columns are missing
     ok = (status == "ok").values

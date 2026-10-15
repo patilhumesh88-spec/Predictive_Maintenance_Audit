@@ -1,5 +1,5 @@
-import pytest
 from fastapi.testclient import TestClient
+
 from maint_audit.api import app
 
 client = TestClient(app)
