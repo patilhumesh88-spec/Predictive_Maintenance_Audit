@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, master, portfolio-upgrade]
+    branches: [main, master]
   pull_request:
     branches: [main, master]
 
@@ -52,8 +52,8 @@ jobs:
           pip install -e ".[dev]" jupyter nbconvert
       - name: Headless Notebook Execution Smoke Test
         run: |
-          jupyter nbconvert --to notebook --execute notebooks/01_data_audit.ipynb --output /dev/null
-          jupyter nbconvert --to notebook --execute notebooks/08_final_evaluation.ipynb --output /dev/null
+          jupyter nbconvert --to notebook --execute notebooks/01_data_audit.ipynb --stdout > /dev/null
+          jupyter nbconvert --to notebook --execute notebooks/08_final_evaluation.ipynb --stdout > /dev/null
 
   docker-build:
     runs-on: ubuntu-latest
