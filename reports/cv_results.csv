@@ -4,18 +4,22 @@ stratified_5fold,raw,Dummy,0.0,0.0,0.0,0.5,0.0375,7700,0,300,0
 stratified_5fold,raw,LogReg,0.1491,0.7967,0.2512,0.8946,0.4289,6336,1364,61,239
 stratified_5fold,raw,RandomForest,0.8157,0.59,0.6847,0.9704,0.7636,7660,40,123,177
 stratified_5fold,raw,HistGB,0.8717,0.6567,0.749,0.9727,0.8275,7671,29,103,197
+stratified_5fold,raw,XGBoost,0.8734,0.6667,0.7561,0.9768,0.8296,7671,29,100,200
 stratified_5fold,engineered,Dummy,0.0,0.0,0.0,0.5,0.0375,7700,0,300,0
 stratified_5fold,engineered,LogReg,0.1847,0.8467,0.3033,0.9257,0.4473,6579,1121,46,254
 stratified_5fold,engineered,RandomForest,0.944,0.8433,0.8908,0.9785,0.906,7685,15,47,253
 stratified_5fold,engineered,HistGB,0.95,0.8233,0.8821,0.9763,0.9037,7687,13,53,247
+stratified_5fold,engineered,XGBoost,0.931,0.81,0.8663,0.981,0.9013,7682,18,57,243
 stratified_5fold,engineered,Hybrid(rules OR RF),0.9453,0.8633,0.9024,0.9788,0.9155,7685,15,41,259
 block_5fold,rules,PhysicsRules,1.0,0.8633,0.9267,0.9317,0.8685,7700,0,41,259
 block_5fold,raw,Dummy,0.0,0.0,0.0,0.3379,0.0296,7700,0,300,0
 block_5fold,raw,LogReg,0.1394,0.6767,0.2312,0.8323,0.3502,6447,1253,97,203
 block_5fold,raw,RandomForest,0.5228,0.3433,0.4145,0.9157,0.4658,7606,94,197,103
 block_5fold,raw,HistGB,0.6994,0.38,0.4924,0.8756,0.4693,7651,49,186,114
+block_5fold,raw,XGBoost,0.5459,0.4167,0.4726,0.8843,0.4755,7596,104,175,125
 block_5fold,engineered,Dummy,0.0,0.0,0.0,0.3379,0.0296,7700,0,300,0
 block_5fold,engineered,LogReg,0.181,0.73,0.2901,0.8841,0.3565,6709,991,81,219
 block_5fold,engineered,RandomForest,0.9742,0.5033,0.6637,0.9733,0.8465,7696,4,149,151
 block_5fold,engineered,HistGB,0.9497,0.5033,0.658,0.9712,0.8427,7692,8,149,151
+block_5fold,engineered,XGBoost,0.91,0.64,0.7515,0.9775,0.8709,7681,19,108,192
 block_5fold,engineered,Hybrid(rules OR RF),0.9848,0.8633,0.9201,0.9773,0.9195,7696,4,41,259

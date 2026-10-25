@@ -2,7 +2,7 @@
 
 setup:  ## Create venv and install
 	python -m venv .venv
-	.venv/Scripts/pip install -e ".[all]"
+	.venv/bin/pip install -e ".[all]"
 
 data:  ## Download dataset (checksum-validated)
 	python scripts/download_data.py

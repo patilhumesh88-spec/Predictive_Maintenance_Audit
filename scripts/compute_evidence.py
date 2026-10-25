@@ -33,7 +33,7 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
-from src.config import (
+from maint_audit.config import (
     DATA_RAW,
     MODE_COLS,
     PRODUCTION_THRESHOLD,
@@ -41,11 +41,11 @@ from src.config import (
     REPORTS_DIR,
     TARGET,
 )
-from src.data import load_raw
-from src.features import ENGINEERED_FEATURES, build_features
-from src.models import make_rf
-from src.rules import rule_flags
-from src.validation import get_splitter, oof_scores
+from maint_audit.data import load_raw
+from maint_audit.features import ENGINEERED_FEATURES, build_features
+from maint_audit.models import make_rf
+from maint_audit.rules import rule_flags
+from maint_audit.validation import get_splitter, oof_scores
 
 
 def to_serializable(obj):
@@ -698,3 +698,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
