@@ -1,9 +1,9 @@
 {
   "generated_by": "scripts/generate_metrics.py",
-  "git_sha": "f8a9be58693c",
+  "git_sha": "5b49fa3267a5",
   "data_sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-  "sklearn_version": "1.9.0",
-  "python_version": "3.14.7",
+  "sklearn_version": "1.9.1",
+  "python_version": "3.14.3",
   "threshold": 0.515,
   "dataset": {
     "rows": 10000,
