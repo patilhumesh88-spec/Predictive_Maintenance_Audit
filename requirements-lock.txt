@@ -1,0 +1,23 @@
+# requirements-lock.txt
+# Exact pinned versions for fully reproducible environment.
+# Generated from: pip freeze
+# Python version: 3.14.3
+# Platform: Windows
+#
+# For development install use: pip install -e ".[all]"
+# For locked reproducible install: pip install -r requirements-lock.txt
+
+scikit-learn==1.9.1
+numpy==2.5.3
+pandas==3.0.6
+joblib==1.6.0
+scipy==1.18.1
+fastapi==0.143.3
+uvicorn==0.54.0
+pydantic==2.14.1
+pydantic_core==2.50.1
+starlette==1.7.0
+streamlit==1.65.0
+httpx==0.28.1
+matplotlib==3.11.2
+seaborn==0.13.2

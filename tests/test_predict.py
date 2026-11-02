@@ -22,8 +22,8 @@ def test_output_length_and_columns():
     df = frame(row(), row(torque=5.0, rpm=1000))
     out = predict_frame(df, b)
     assert len(out) == 2
-    for c in ["rule_hdf", "rule_pwf", "rule_osf", "ml_risk", "risk_flag",
-              "likely_mode", "status"]:
+    for c in ["rule_hdf", "rule_pwf", "rule_osf", "rule_twf_elevated",
+              "rule_any", "ml_risk", "risk_flag", "likely_mode", "status"]:
         assert c in out.columns
     assert bool(out.loc[1, "risk_flag"]) is True and "PWF" in out.loc[1, "likely_mode"]
 
@@ -82,3 +82,24 @@ def test_leakage_columns_are_never_model_features():
 
 def test_production_threshold_matches_config():
     assert PRODUCTION_THRESHOLD == 0.515
+
+
+def test_twf_elevated_flag_present_in_output():
+    """rule_twf_elevated must appear in predict_frame output."""
+    b = _bundle()
+    df = frame(row(wear=250))   # high wear -> TWF elevated
+    out = predict_frame(df, b)
+    assert "rule_twf_elevated" in out.columns
+    assert bool(out.loc[0, "rule_twf_elevated"]) is True
+
+
+def test_twf_elevated_does_not_set_risk_flag_alone():
+    """High wear alone (no physics rules, low ml_risk) must not flip risk_flag."""
+    b = _bundle(threshold=0.999)   # extremely high threshold -> ML never fires
+    # Type H, high wear=250, but no HDF/PWF/OSF triggers
+    df = frame(row(air=300, proc=310, rpm=1500, torque=40, wear=250, typ="H"))
+    out = predict_frame(df, b)
+    # rule_twf_elevated should be True
+    assert bool(out.loc[0, "rule_twf_elevated"]) is True
+    # but risk_flag driven only by rule_any | ml >= thr; with high thr and no physics rules it should be False
+    assert bool(out.loc[0, "rule_any"]) is False

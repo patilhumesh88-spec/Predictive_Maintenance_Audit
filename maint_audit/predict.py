@@ -18,6 +18,22 @@ from .rules import rule_flags
 
 
 def predict_frame(df: pd.DataFrame, bundle: dict, threshold: float | None = None) -> pd.DataFrame:
+    """Score a DataFrame of telemetry records end-to-end.
+
+    Parameters
+    ----------
+    df:
+        Input DataFrame with required sensor columns.
+    bundle:
+        Model bundle dict with keys ``model``, ``features``, ``threshold``.
+    threshold:
+        Override the bundle threshold. If None, uses bundle default.
+
+    Returns
+    -------
+    DataFrame with columns: rule_hdf, rule_pwf, rule_osf, rule_twf_elevated,
+    rule_any, ml_risk, risk_flag, likely_mode, status (plus any ID columns).
+    """
     thr = bundle.get("threshold", PRODUCTION_THRESHOLD) if threshold is None else threshold
     status = validate_inputs(df)            # raises ValueError if required columns are missing
     ok = (status == "ok").values
@@ -26,8 +42,10 @@ def predict_frame(df: pd.DataFrame, bundle: dict, threshold: float | None = None
     for c in ID_COLS:
         if c in df.columns:
             out[c] = df[c]
-    flags = pd.DataFrame(False, index=df.index,
-                         columns=["rule_hdf", "rule_pwf", "rule_osf", "rule_any"])
+    flags = pd.DataFrame(
+        False, index=df.index,
+        columns=["rule_hdf", "rule_pwf", "rule_osf", "rule_twf_elevated", "rule_any"],
+    )
     risk = pd.Series(np.nan, index=df.index, dtype=float)
     if ok.any():
         sub = df.loc[ok]
@@ -47,7 +65,10 @@ def predict_frame(df: pd.DataFrame, bundle: dict, threshold: float | None = None
         modes = [m for m, c in (("HDF", "rule_hdf"), ("PWF", "rule_pwf"), ("OSF", "rule_osf")) if r[c]]
         if modes:
             return "Rule-triggered failure risk (" + "+".join(modes) + ")"
+        if r["rule_twf_elevated"] and not r["risk_flag"]:
+            return "Elevated TWF watch (tool wear >= 200 min — monitor closely)"
         return "Residual statistical risk" if r["risk_flag"] else "No documented rule triggered"
+
     out["likely_mode"] = [explain(i) for i in range(len(out))]
     out["status"] = status.values
     return out

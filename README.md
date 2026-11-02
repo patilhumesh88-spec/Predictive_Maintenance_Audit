@@ -1,10 +1,12 @@
-# Predictive Maintenance Audit
+﻿# Predictive Maintenance Audit
 
 [![CI](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
 **A leakage-aware investigation into physical failure mechanisms vs. machine learning risk scoring on industrial milling telemetry.**
+
+> **What makes this different:** Most ML projects report accuracy metrics and stop. This project audits *whether ML is even the right tool* � by reverse-engineering the underlying physics, benchmarking a zero-parameter deterministic engine against a trained Random Forest, and stress-testing both under distribution shift and unseen failure modes. The result is an honest null finding: ML adds **zero binary recall** over elementary physics equations on the holdout, while providing valuable continuous risk ranking that enables cost-optimal alert tiering.
 
 > **The 60-Second Summary:** Can machine learning improve upon documented physics equations for predicting mechanical equipment failure? By auditing the synthetic UCI AI4I 2020 benchmark (10,000 observations, 339 failure events), this project reconstructs deterministic thermodynamic and mechanical rules that explain **84.66% of all failures with 100% precision**. On an untouched holdout set, Random Forest ML ties the rules exactly on binary decisions (**28 TP / 0 FP / 11 FN**). However, ML provides well-calibrated continuous risk ranking (ROC-AUC 0.972 vs. 0.859), and physics-informed features protect the model against distribution shift under blocked validation. Stress-testing reveals that when an unseen physical failure mode is held out, ML recall collapses to **7.8%–14.1%**, whereas deterministic physics rules maintain **100% recall**.
 
@@ -135,7 +137,8 @@ predictive-maintenance-audit/
 ├── LICENSE                   # MIT License
 ├── model_card.md             # Model documentation and disclosures
 ├── pyproject.toml            # PEP 621 package metadata and dependencies
-└── requirements.txt          # Pinned environment requirements
+└── requirements.txt          # Minimum version requirements
+u{2514}u{2500}u{2500} requirements-lock.txt    # Exact pinned versions for reproducible environment
 ```
 
 ---

@@ -32,6 +32,7 @@ def test_predict_single_normal():
         assert data["risk_flag"] is False
         assert data["rule_any"] is False
         assert 0.0 <= data["ml_risk"] <= 1.0
+        assert "rule_twf_elevated" in data
 
 
 def test_predict_single_hdf_rule():
@@ -52,7 +53,24 @@ def test_predict_single_hdf_rule():
         assert "HDF" in data["likely_mode"]
 
 
-def test_predict_batch():
+def test_predict_single_twf_elevated():
+    """High tool wear should set rule_twf_elevated in API response."""
+    with TestClient(app) as c:
+        payload = {
+            "Air temperature [K]": 300.0,
+            "Process temperature [K]": 310.0,
+            "Rotational speed [rpm]": 1500.0,
+            "Torque [Nm]": 40.0,
+            "Tool wear [min]": 250.0,   # >= 200 min threshold
+            "Type": "H",
+        }
+        response = c.post("/predict", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["rule_twf_elevated"] is True
+
+
+def test_predict_batch_normal_and_failure():
     with TestClient(app) as c:
         records = [
             {
@@ -81,6 +99,45 @@ def test_predict_batch():
         assert data[0]["risk_flag"] is False
         assert data[1]["rule_pwf"] is True
         assert data[1]["risk_flag"] is True
+        # Both should have the new field
+        assert "rule_twf_elevated" in data[0]
+        assert "rule_twf_elevated" in data[1]
+
+
+def test_predict_batch_empty_returns_empty_list():
+    with TestClient(app) as c:
+        response = c.post("/predict/batch", json=[])
+        assert response.status_code == 200
+        assert response.json() == []
+
+
+def test_predict_batch_mixed_valid_invalid():
+    """Batch with a PWF failure and one high-wear record."""
+    with TestClient(app) as c:
+        records = [
+            {
+                "Air temperature [K]": 300.0,
+                "Process temperature [K]": 310.0,
+                "Rotational speed [rpm]": 1000.0,
+                "Torque [Nm]": 5.0,
+                "Tool wear [min]": 50.0,
+                "Type": "L",
+            },
+            {
+                "Air temperature [K]": 300.0,
+                "Process temperature [K]": 310.0,
+                "Rotational speed [rpm]": 1500.0,
+                "Torque [Nm]": 40.0,
+                "Tool wear [min]": 220.0,
+                "Type": "M",
+            },
+        ]
+        response = c.post("/predict/batch", json=records)
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) == 2
+        assert data[0]["rule_pwf"] is True
+        assert data[1]["rule_twf_elevated"] is True
 
 
 def test_predict_invalid_input_schema():

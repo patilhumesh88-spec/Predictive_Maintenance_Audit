@@ -47,6 +47,7 @@ class PredictionResponse(BaseModel):
     rule_hdf: bool
     rule_pwf: bool
     rule_osf: bool
+    rule_twf_elevated: bool
     rule_any: bool
     ml_risk: float
     risk_flag: bool
@@ -85,20 +86,15 @@ def _record_to_df(records: list[TelemetryRecord]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-@app.post("/predict", response_model=PredictionResponse)
-def predict_single(record: TelemetryRecord):
-    if bundle is None:
-        raise HTTPException(status_code=503, detail="Model bundle not loaded")
-    df = _record_to_df([record])
-    res = predict_frame(df, bundle)
-    row = res.iloc[0]
+def _row_to_response(row: pd.Series) -> PredictionResponse:
     return PredictionResponse(
         rule_hdf=bool(row["rule_hdf"]),
         rule_pwf=bool(row["rule_pwf"]),
         rule_osf=bool(row["rule_osf"]),
+        rule_twf_elevated=bool(row["rule_twf_elevated"]),
         rule_any=bool(row["rule_any"]),
-        ml_risk=float(row["ml_risk"]),
-        risk_flag=bool(row["risk_flag"]),
+        ml_risk=float(row["ml_risk"]) if pd.notna(row["ml_risk"]) else 0.0,
+        risk_flag=bool(row["risk_flag"]) if pd.notna(row["risk_flag"]) else False,
         likely_mode=str(row["likely_mode"]),
         status=str(row["status"]),
         udi=int(row["UDI"]) if "UDI" in row and pd.notna(row["UDI"]) else None,
@@ -106,28 +102,23 @@ def predict_single(record: TelemetryRecord):
     )
 
 
+@app.post("/predict", response_model=PredictionResponse)
+async def predict_single(record: TelemetryRecord):
+    """Score a single telemetry record and return failure risk diagnostics."""
+    if bundle is None:
+        raise HTTPException(status_code=503, detail="Model bundle not loaded")
+    df = _record_to_df([record])
+    res = predict_frame(df, bundle)
+    return _row_to_response(res.iloc[0])
+
+
 @app.post("/predict/batch", response_model=list[PredictionResponse])
-def predict_batch(records: list[TelemetryRecord]):
+async def predict_batch(records: list[TelemetryRecord]):
+    """Score a batch of telemetry records. Invalid rows are returned with status='invalid:...'."""
     if bundle is None:
         raise HTTPException(status_code=503, detail="Model bundle not loaded")
     if not records:
         return []
     df = _record_to_df(records)
     res = predict_frame(df, bundle)
-    out = []
-    for _, row in res.iterrows():
-        out.append(
-            PredictionResponse(
-                rule_hdf=bool(row["rule_hdf"]),
-                rule_pwf=bool(row["rule_pwf"]),
-                rule_osf=bool(row["rule_osf"]),
-                rule_any=bool(row["rule_any"]),
-                ml_risk=float(row["ml_risk"]) if pd.notna(row["ml_risk"]) else 0.0,
-                risk_flag=bool(row["risk_flag"]) if pd.notna(row["risk_flag"]) else False,
-                likely_mode=str(row["likely_mode"]),
-                status=str(row["status"]),
-                udi=int(row["UDI"]) if "UDI" in row and pd.notna(row["UDI"]) else None,
-                product_id=str(row["Product ID"]) if "Product ID" in row and pd.notna(row["Product ID"]) else None,
-            )
-        )
-    return out
+    return [_row_to_response(row) for _, row in res.iterrows()]
