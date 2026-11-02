@@ -1,4 +1,4 @@
-﻿# Predictive Maintenance Audit
+# Predictive Maintenance Audit
 
 [![CI](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -21,7 +21,7 @@ python scripts/verify_all.py
 ```
 
 To run individual entry points:
-- **Run test suite (20+ tests):** `pytest tests/ -v`
+- **Run test suite (57 tests):** `pytest tests/ -v`
 - **Regenerate metrics single source of truth:** `python scripts/generate_metrics.py`
 - **Launch interactive diagnostic dashboard:** `streamlit run dashboard/app.py`
 - **Launch FastAPI inference service:** `uvicorn maint_audit.api:app --reload`
@@ -131,14 +131,14 @@ predictive-maintenance-audit/
 │   ├── download_data.py      # Checksum-validated data retrieval
 │   ├── generate_metrics.py   # Single-source-of-truth generation pipeline
 │   └── verify_all.py         # End-to-end quality and verification script
-├── tests/                    # Pytest test suite (100% passing)
+├── tests/                    # Pytest test suite (57 tests, 100% passing)
 ├── Dockerfile                # Slim, non-root container image
 ├── Makefile                  # Developer workflow automation
 ├── LICENSE                   # MIT License
 ├── model_card.md             # Model documentation and disclosures
 ├── pyproject.toml            # PEP 621 package metadata and dependencies
 └── requirements.txt          # Minimum version requirements
-u{2514}u{2500}u{2500} requirements-lock.txt    # Exact pinned versions for reproducible environment
+└── requirements-lock.txt    # Exact pinned versions for reproducible environment
 ```
 
 ---
@@ -157,8 +157,3 @@ u{2514}u{2500}u{2500} requirements-lock.txt    # Exact pinned versions for repro
 - **Dataset License:** Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)).
 - **Code License:** [MIT License](LICENSE).
 
----
-
-## Tool Disclosure
-
-Built with AI coding assistance under direct human methodology oversight; every reported numerical result is regenerated and verified by code.

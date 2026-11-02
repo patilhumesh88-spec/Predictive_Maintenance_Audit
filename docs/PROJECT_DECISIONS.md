@@ -53,11 +53,6 @@
 - Holdout metrics above come from a model trained on only the 8,000-row development set.
 - This is disclosed in the model card and README.
 
-## Terminology We Do NOT Use
-- "unpredictable" / "provably unpredictable" for residual failures
-- "temporal forecasting" for ordered-block CV
-- "ML-only (unexplained)" — use "ML risk detected", "No documented rule triggered", "Residual statistical risk"
-- "no physical warning indicators" for TWF (tool wear IS a signal)
 
 ## Limitations
 - Dataset is synthetic; no real factory deployment claim
