@@ -1,12 +1,12 @@
-# Predictive Maintenance Audit
+﻿# Predictive Maintenance Audit
 
-[![CI](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/patilhumesh88-spec/predictive-maintenance-audit/actions/workflows/ci.yml)
+[![CI](https://github.com/patilhumesh88-spec/Predictive_Maintenance_Audit/actions/workflows/ci.yml/badge.svg)](https://github.com/patilhumesh88-spec/Predictive_Maintenance_Audit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
 **A leakage-aware investigation into physical failure mechanisms vs. machine learning risk scoring on industrial milling telemetry.**
 
-> **What makes this different:** Most ML projects report accuracy metrics and stop. This project audits *whether ML is even the right tool* � by reverse-engineering the underlying physics, benchmarking a zero-parameter deterministic engine against a trained Random Forest, and stress-testing both under distribution shift and unseen failure modes. The result is an honest null finding: ML adds **zero binary recall** over elementary physics equations on the holdout, while providing valuable continuous risk ranking that enables cost-optimal alert tiering.
+> **What makes this different:** Most ML projects report accuracy metrics and stop. This project audits *whether ML is even the right tool* — by reverse-engineering the underlying physics, benchmarking a zero-parameter deterministic engine against a trained Random Forest, and stress-testing both under distribution shift and unseen failure modes. The result is an honest null finding: ML adds **zero binary recall** over elementary physics equations on the holdout, while providing valuable continuous risk ranking that enables cost-optimal alert tiering.
 
 > **The 60-Second Summary:** Can machine learning improve upon documented physics equations for predicting mechanical equipment failure? By auditing the synthetic UCI AI4I 2020 benchmark (10,000 observations, 339 failure events), this project reconstructs deterministic thermodynamic and mechanical rules that explain **84.66% of all failures with 100% precision**. On an untouched holdout set, Random Forest ML ties the rules exactly on binary decisions (**28 TP / 0 FP / 11 FN**). However, ML provides well-calibrated continuous risk ranking (ROC-AUC 0.972 vs. 0.859), and physics-informed features protect the model against distribution shift under blocked validation. Stress-testing reveals that when an unseen physical failure mode is held out, ML recall collapses to **7.8%–14.1%**, whereas deterministic physics rules maintain **100% recall**.
 
@@ -15,7 +15,7 @@
 ## Quickstart in 3 Commands
 
 ```bash
-git clone https://github.com/patilhumesh88-spec/predictive-maintenance-audit.git && cd predictive-maintenance-audit
+git clone https://github.com/patilhumesh88-spec/Predictive_Maintenance_Audit.git && cd Predictive_Maintenance_Audit
 pip install -e ".[all]"
 python scripts/verify_all.py
 ```
@@ -98,7 +98,7 @@ Across all 10,000 rows in the raw dataset, these equations reconstruct the datas
 ## Project Structure
 
 ```
-predictive-maintenance-audit/
+Predictive_Maintenance_Audit/
 ├── .github/workflows/ci.yml  # GitHub Actions CI matrix (Py 3.11-3.13)
 ├── dashboard/app.py          # Interactive Streamlit UI
 ├── data/raw/ai4i2020.csv     # Verified UCI benchmark dataset
@@ -148,6 +148,11 @@ predictive-maintenance-audit/
 - **Synthetic Telemetry:** The AI4I 2020 dataset was synthetically generated. While based on real milling machine equations, it does not capture complex factory noise or non-stationary sensor wear.
 - **Holdout Imbalance:** The 2,000-row holdout contains 0 Heat Dissipation Failures (HDF), leaving ML's holdout generalization on HDF untested.
 - **Spent Holdout:** The holdout set has been examined and must be considered spent. Any future modeling exploration must use development cross-validation.
+
+
+## Project Origin
+
+This project started as a hackathon entry and was substantially extended afterwards into a standalone engineering portfolio piece — adding packaging, CI, a FastAPI service, 57 tests, bootstrap confidence intervals, Leave-One-Failure-Mode-Out generalization tests, and a Streamlit dashboard.
 
 ---
 

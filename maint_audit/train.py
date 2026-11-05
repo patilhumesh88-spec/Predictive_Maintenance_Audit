@@ -32,7 +32,7 @@ def split_holdout(df, mode: str, frac: float):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default=str(DATA_RAW))
-    ap.add_argument("--holdout", choices=["random", "tail"], default="random")
+    ap.add_argument("--holdout", choices=["random", "tail"], default="tail")
     ap.add_argument("--holdout-frac", type=float, default=0.2)
     ap.add_argument("--fit-all", action="store_true",
                     help="after reporting, refit the saved model on ALL rows (dev + holdout)")

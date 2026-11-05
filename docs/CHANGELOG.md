@@ -58,5 +58,4 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - Package relocated from `src/` layout to `maint_audit/`
-- README completely rewritten for recruiter-facing clarity
 - Dashboard reads all metrics from `reports/metrics.json` (no hard-coded values)

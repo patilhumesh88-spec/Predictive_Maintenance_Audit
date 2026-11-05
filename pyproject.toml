@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "maint-audit"
-version = "1.0.0"
+version = "1.1.0"
 description = "Leakage-aware failure-risk scoring on the UCI AI4I 2020 Predictive Maintenance dataset"
 readme = "README.md"
 license = {text = "MIT"}

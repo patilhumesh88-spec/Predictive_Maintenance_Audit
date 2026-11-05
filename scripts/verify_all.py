@@ -26,36 +26,11 @@ def check(name, passed, detail=""):
 def main():
     os.chdir(ROOT)
 
-    print("\n=== 1. BRANDING CHECK ===")
-    brand_terms = ["algothon", "alg-data", "predict what happens", "ps-02",
-                   "hackathon", "competition", "submission", "demo video"]
-    hits = []
-    for p in ROOT.rglob("*"):
-        if p.is_dir() or any(x in p.parts for x in (".git", ".venv", "__pycache__", ".ruff_cache", ".pytest_cache")):
-            continue
-        if p.suffix in (".pyc", ".joblib", ".png", ".jpg", ".gif", ".ico"):
-            continue
-        if p.resolve() == Path(__file__).resolve():
-            continue
-        try:
-            text = p.read_text(encoding="utf-8", errors="ignore").lower()
-            for term in brand_terms:
-                if term in text:
-                    hits.append(f"{p.relative_to(ROOT)}: '{term}'")
-        except Exception:
-            pass
-    # Also check notebook cells
-    for nb_path in ROOT.glob("notebooks/*.ipynb"):
-        try:
-            nb = json.loads(nb_path.read_text(encoding="utf-8"))
-            for cell in nb.get("cells", []):
-                source = "".join(cell.get("source", [])).lower()
-                for term in brand_terms:
-                    if term in source:
-                        hits.append(f"{nb_path.relative_to(ROOT)} (cell): '{term}'")
-        except Exception:
-            pass
-    check("No branding terms", len(hits) == 0, f"{len(hits)} hits: {hits[:5]}" if hits else "")
+    print("\n=== 1. ORIGIN NOTE ===")
+    # This project started as a hackathon entry and was substantially extended afterwards.
+    # That origin is stated openly in the README (see ## Project Origin section).
+    # No scrubbing is performed — honesty about the project's roots is a feature, not a flaw.
+    check("Origin disclosed in README", "Project Origin" in (ROOT / "README.md").read_text(encoding="utf-8"))
 
     print("\n=== 2. PERSONAL PATH CHECK ===")
     path_hits = []
