@@ -1,9 +1,6 @@
 """Extended boundary-value tests for all physics rules, including TWF heuristic."""
-import pytest
-import numpy as np
-from maint_audit.rules import rule_flags, TWF_WEAR_THRESHOLD_MIN
+from maint_audit.rules import TWF_WEAR_THRESHOLD_MIN, rule_flags
 from tests.helpers import frame, row
-
 
 # ---------------------------------------------------------------------------
 # HDF boundary tests

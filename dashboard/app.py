@@ -1,7 +1,5 @@
-import json
 import os
 import sys
-from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -107,7 +105,7 @@ with tab_live:
             if is_fail:
                 st.error(f"🚨 **FAILURE RISK DETECTED** — {status_label}")
             elif twf_elevated:
-                st.warning(f"⚠️ **ELEVATED TWF WATCH** — Tool wear ≥ 200 min. Monitor closely; stochastic TWF risk elevated.")
+                st.warning("⚠️ **ELEVATED TWF WATCH** — Tool wear ≥ 200 min. Monitor closely; stochastic TWF risk elevated.")
             else:
                 st.success("✅ **SYSTEM HEALTHY** — No immediate failure risk detected.")
 

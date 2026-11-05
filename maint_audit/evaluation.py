@@ -10,16 +10,12 @@ import json
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
 
-from .config import MODE_COLS, RANDOM_STATE, REPORTS_DIR, TARGET
+from .config import REPORTS_DIR, TARGET
 from .features import ENGINEERED_FEATURES, build_features
 from .models import make_rf
 from .rules import rule_flags
-
 
 # ---------------------------------------------------------------------------
 # Leave-One-Failure-Mode-Out (LOFMO)

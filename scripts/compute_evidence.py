@@ -33,6 +33,7 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
+
 from maint_audit.config import (
     DATA_RAW,
     MODE_COLS,

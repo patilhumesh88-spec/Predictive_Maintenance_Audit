@@ -1,6 +1,4 @@
 """Tests for the evaluation utilities module (LOFMO helpers, report loaders)."""
-import json
-from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -13,7 +11,6 @@ from maint_audit.evaluation import (
     load_lofmo_report,
     load_metrics_report,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures: minimal mock report dicts
