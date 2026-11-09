@@ -73,14 +73,14 @@ All metrics are regenerated directly from code into `reports/metrics.json` and v
 
 ```mermaid
 flowchart TD
-    A[Sensor Telemetry] --> B[Strict Schema & Plausibility Validation]
+    A[Sensor Telemetry] --> B["Strict Schema and Plausibility Validation"]
     B --> C[Physics Feature Engineering]
-    C --> D[Deterministic Rule Engine\nHDF | PWF | OSF]
-    C --> E[Leakage-Safe Random Forest\nContinuous Risk Ranking]
+    C --> D["Deterministic Rule Engine<br/>HDF / PWF / OSF"]
+    C --> E["Leakage-Safe Random Forest<br/>Continuous Risk Ranking"]
     D --> F{Decision Logic Layer}
     E --> F
-    F -->|rule_triggered OR risk >= 0.515| G[Calibrated Alarm & Attribution]
-    G --> H[FastAPI Endpoint / Streamlit UI]
+    F --> |"rule_triggered OR risk >= 0.515"| G["Calibrated Alarm and Attribution"]
+    G --> H["FastAPI Endpoint / Streamlit UI"]
 ```
 
 ### Deterministic Physics Equations
