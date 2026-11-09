@@ -1,8 +1,9 @@
-﻿# Predictive Maintenance Audit
+# Predictive Maintenance Audit
 
 [![CI](https://github.com/patilhumesh88-spec/Predictive_Maintenance_Audit/actions/workflows/ci.yml/badge.svg)](https://github.com/patilhumesh88-spec/Predictive_Maintenance_Audit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?logo=streamlit)](https://autonomous-vehicle-risk-prediction-y2yc6whmzaejtcqedxxray.streamlit.app/)
 
 **A leakage-aware investigation into physical failure mechanisms vs. machine learning risk scoring on industrial milling telemetry.**
 
@@ -25,6 +26,20 @@ To run individual entry points:
 - **Regenerate metrics single source of truth:** `python scripts/generate_metrics.py`
 - **Launch interactive diagnostic dashboard:** `streamlit run dashboard/app.py`
 - **Launch FastAPI inference service:** `uvicorn maint_audit.api:app --reload`
+
+---
+
+## Live Dashboard
+
+**[Launch the interactive dashboard](https://autonomous-vehicle-risk-prediction-y2yc6whmzaejtcqedxxray.streamlit.app/)** — hosted on Streamlit Cloud, no install required.
+
+The dashboard exposes:
+- **Predict tab:** single-row inference with physics rule attribution (HDF / PWF / OSF / TWF) and ML risk score
+- **Research Findings tab:** LOFMO generalization chart, cost-sensitivity sweep, blocked vs. shuffled CV comparison
+- **Metrics tab:** full holdout and cross-validation results loaded live from 
+eports/metrics.json
+
+> To run locally: streamlit run dashboard/app.py
 
 ---
 
